@@ -74,7 +74,7 @@
   
 <meta name="generator" content="Hexo 4.2.1"></head>
 <body>
-<script>AV.init({appId:'',appKey:''});</script>
+<script>AV.init({appId:'uoPjO1Pql9TXsHYyO9KTNp69-gzGzoHsz',appKey:'vaBehzaSHaMei5O5DyH6PWWl'});</script>
 <script type="text/javascript">
       var config = {
             ClasS: 'Counter',
@@ -265,8 +265,53 @@
         </script>
 
         
+        
+            <div id="disqus_thread"></div>
+            <script data-no-instant>
+                $(document).ready(function() {
+                    $('.post-comments-btn').on('click', function(){
+                        var disqus_shortname = 'iamlinguo';
+                        $.ajax({
+                            type: "GET",
+                            url: "https://" + disqus_shortname + ".disqus.com/embed.js",
+                            dataType: "script",
+                            cache: true
+                        });
+                        $('.post-more-function-br').css('height','.6em');
+                    });
+                });
+                var reset = function (newIdentifier, newUrl, newTitle, newLanguage) {
+                    DISQUS.reset({
+                        reload: true,
+                        config: function () {
+                            this.page.identifier = newIdentifier;
+                            this.page.url = newUrl;
+                            this.page.title = newTitle;
+                            this.language = newLanguage;
+                        }
+                    });
+                };
+            </script>
+            
     </article>
     
+      <article class="blog-post-block blog-post-page-content" style="margin-top:2.5em;">
+      
+      <div class="comment"></div>
+      <script>
+          new Valine({
+              av: AV, // source from av-min.js
+              el: '.comment' ,
+              notify:false, // 邮件提醒 v1.1.4新增
+              verify:false, // 验证码 v1.1.4新增
+              app_id: 'uoPjO1Pql9TXsHYyO9KTNp69-gzGzoHsz',
+              app_key: 'vaBehzaSHaMei5O5DyH6PWWl',
+              placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!',
+              path:window.location.pathname // 路径配置 v1.1.5新增，可填window.location.href
+          });
+      </script>
+      </article>
+      
 </div>
 
                 
