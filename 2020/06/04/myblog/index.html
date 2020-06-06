@@ -114,7 +114,7 @@
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/04/hello-world/" class="views views-post"  title="我的博客创建好了"></span>
+        <span id="/2020/06/04/myblog/" class="views views-post"  title="我的博客创建好了"></span>
     </span>
     
     
@@ -139,6 +139,8 @@
     <article class="blog-post-page-readmore">
     	
     	
+		
+			<a href="/2020/06/06/myblog%202/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="我的博客创建好了">上一篇</a>
 		
 
 		
@@ -244,7 +246,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("http://yoursite.com/2020/06/04/hello-world/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("http://yoursite.com/2020/06/04/myblog/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>
@@ -315,7 +317,7 @@
             </div>
             <div class="blog-sidebar-count blog-sidebar-padding">
                 <div class="blog-sidebar-count-left">
-                    <p class="blog-sidebar-count-p">1</p>
+                    <p class="blog-sidebar-count-p">2</p>
                     <span class="blog-sidebar-count-span">文章</span>
                 </div>
                 <div class="blog-sidebar-count-right">

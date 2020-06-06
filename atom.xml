@@ -18,8 +18,31 @@
   
   <entry>
     <title>我的博客创建好了</title>
-    <link href="http://yoursite.com/2020/06/04/hello-world/"/>
-    <id>http://yoursite.com/2020/06/04/hello-world/</id>
+    <link href="http://yoursite.com/2020/06/06/myblog%202/"/>
+    <id>http://yoursite.com/2020/06/06/myblog%202/</id>
+    <published>2020-06-06T11:20:39.032Z</published>
+    <updated>2020-06-06T11:18:04.710Z</updated>
+    
+    <content type="html"><![CDATA[<p>啦啦啦啦 </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;啦啦啦啦 &lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>我的博客创建好了</title>
+    <link href="http://yoursite.com/2020/06/04/myblog/"/>
+    <id>http://yoursite.com/2020/06/04/myblog/</id>
     <published>2020-06-03T18:31:43.518Z</published>
     <updated>2020-06-06T11:18:04.710Z</updated>
     
