@@ -5,9 +5,9 @@
   <subtitle>Java-</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="https://iamlinguo.github.io/"/>
   <updated>2020-06-03T18:31:43.518Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>https://iamlinguo.github.io/</id>
   
   <author>
     <name>LinGuo</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>我拥有自己的Blog了！</title>
-    <link href="http://yoursite.com/2020/06/04/myblog/"/>
-    <id>http://yoursite.com/2020/06/04/myblog/</id>
+    <link href="https://iamlinguo.github.io/2020/06/04/myblog/"/>
+    <id>https://iamlinguo.github.io/2020/06/04/myblog/</id>
     <published>2020-06-03T18:31:43.518Z</published>
     <updated>2020-06-03T18:31:43.518Z</updated>
     
@@ -36,7 +36,7 @@
     
     
     
-      <category term="初衷" scheme="http://yoursite.com/tags/%E5%88%9D%E8%A1%B7/"/>
+      <category term="初衷" scheme="https://iamlinguo.github.io/tags/%E5%88%9D%E8%A1%B7/"/>
     
   </entry>
   
