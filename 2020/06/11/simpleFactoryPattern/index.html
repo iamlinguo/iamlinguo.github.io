@@ -116,7 +116,7 @@
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/11/design_simpleFactoryPattern/" class="views views-post"  title="我拥有自己的blog了！"></span>
+        <span id="/2020/06/11/simpleFactoryPattern/" class="views views-post"  title="我拥有自己的blog了！"></span>
     </span>
     
     
@@ -279,7 +279,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/11/design_simpleFactoryPattern/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/11/simpleFactoryPattern/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>
