@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://iamlinguo.github.io/"/>
-  <updated>2020-06-21T15:42:40.521Z</updated>
+  <updated>2020-06-27T19:05:48.507Z</updated>
   <id>https://iamlinguo.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>重学设计模式-设计原则</title>
+    <link href="https://iamlinguo.github.io/2020/06/28/designPrinciples/"/>
+    <id>https://iamlinguo.github.io/2020/06/28/designPrinciples/</id>
+    <published>2020-06-27T18:39:01.375Z</published>
+    <updated>2020-06-27T19:05:48.507Z</updated>
+    
+    <content type="html"><![CDATA[<p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p><hr><h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote><ol><li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li><li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li><li>依赖倒置（依赖倒转）原则<br>定义：<ol><li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li><li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li></ol></li><li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li></ol></blockquote><p>学习素材来源：《大话设计模式》–程杰</p><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;现在是北京时间2020-06-28 02:40。&lt;br&gt;今天要学的的内容是：设计原则&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&quot;设计原则（principles）&quot;&gt;&lt;a href=&quot;#设计原则（principles）&quot; class=&quot;headerlink&quot; title=&quot;设计原则（
+      
+    
+    </summary>
+    
+    
+      <category term="设计模式" scheme="https://iamlinguo.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>重学设计模式-策略模式</title>
