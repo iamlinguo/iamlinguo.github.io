@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-简单工厂iamLinGuo</title>
+  <title>Kafka-入门iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-简单工厂</h4>
-    <time datetime="2020-06-10T16:15:54.758Z"><i class="fa fa-clock-o"></i>2020-06-11</time>
+    <h4>Kafka-入门</h4>
+    <time datetime="2020-08-28T20:28:08.679Z"><i class="fa fa-clock-o"></i>2020-08-29</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/11/simpleFactoryPattern/" class="views views-post"  title="重学设计模式-简单工厂"></span>
+        <span id="/2020/08/29/kafkaGettingStart/" class="views views-post"  title="Kafka-入门"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">中间件</a>
     		
         </span>
 	
@@ -134,29 +134,23 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-10 22:30，今天星期三，哈哈最近在看的一部动漫“篮球少年王”更新了，我已经迫不及待了，先忍忍，容我写完这篇笔记。</p>
-<p>简单的做一下今天工作的总结，早上出门下了点小雨，不过还好，因为！我带伞了哈哈哈哈，今天的工作内容主要还是改代码修代码，cto给我做的一个短信接口挑出了不少毛病，很多隐藏的bug，教我如何把代码抽离控制器实现业务层的封装，上午一直在做一个昨天没做完的图片接口，下午看了会同时刘哥写的代码，准备对接明天的任务。</p>
-<p>最近在看“大话设计模式”这本书，今天的内容就写一下前几天看的内容把 </p>
+                <p>北京时间：2020/08/29<br>近期技术总结</p>
 <hr>
-<h4 id="1-我为什么要学？"><a href="#1-我为什么要学？" class="headerlink" title="1. 我为什么要学？"></a>1. 我为什么要学？</h4><p>有没有一天，你突然觉得自己基础很差劲，在学校也没有好好学，工作也只会所谓的CV大法，看着复杂的项目不知从何下手，你是否听过一句话叫<code>“基础不牢，地动山摇“</code>。没错，这就是我，现在的我，从培训机构出来，感觉时间很快很匆忙就把一堆框架学完了，也写了很多代码，可还是对阅读代码、特别是开源代码库感到非常吃力，所以这也是我学习的决心，我要把没学过的东西都补回来。<br>可是每次下定决心打算学习一个知识点，三天打鱼两天晒网终究没学到什么东西，学了忘忘了学，反反复复总结：没学到啥jb。(废话好像有点多了…)<br>设计模式，我们任何一门语言好像都曾听闻过它的强大，它的好处，可我们一直停留在了对它的印象，其实不如静下心来好好学一学，相信一定收获颇丰。<br>设计模式从字面意思很好理解，设计！就这两个字足够你理解它，何为设计，设计不就是把一样不太完美的东西，经过你的一番修饰，让它变得完美。代码亦是如此，我们在工作中写了不知道多少冗余、复杂、流水代码，以至于隔三日定当不相识(????这tm是我写的代码黑人???三连)，想象一下，如果公司某个核心开源框架的底层是如此，那..后期可能会是一场灾难，这也是现在公司为什么不推崇faxxJson的一大原因(虽然易用，但bug居多，不宜长期打算，我不是黑粉！！)，设计模式我觉得最为重要的的一点莫过于这两点：<code>可复用、易读</code>。</p>
-<h4 id="2-我学了设计模式能干嘛？"><a href="#2-我学了设计模式能干嘛？" class="headerlink" title="2. 我学了设计模式能干嘛？"></a>2. 我学了设计模式能干嘛？</h4><p>能干嘛？这tm还用想，刚刚不是说了嘛，基础差、看不懂！我不喜欢什么大道理，我就是看不懂(底子差)，我想先从设计模式入手，一步一步进阶。<br>我是一个有理想的码农，我希望某一天我也能写一款自己的开源项目给别人使用，讲实在的，能干嘛？举个例子，我现在每天写的代码，一个Method300+的代码，大量的if、else、for，在以前，我是没有意识去修改它的，项目嘛！能跑就行，有bug后期再改，其实这样是很不对的，天天CV上班摸鱼，三年下来还是老样子，更别提什么新技术新框架的掌握了，像这种大量的冗余代码的时候，大可仔细思考，那部分的代码可以抽出来形成单独的接口，在没看设计模式这本书之前，我是没有这种思想觉悟的，多学习积累经验嘛。</p>
-<h1 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h1><p>简单工厂模式这是我看的第一个设计模式，也是每一个想学习设计模式人的入门级知识，其实我目前也只学习了这一种哈哈哈哈。<br>请看以下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> num1,num2,result; </span><br><span class="line">String symbol; <span class="comment">//符号</span></span><br><span class="line">System.out.println(<span class="string">"输入第一个数字"</span>);</span><br><span class="line">num1 = in.nextDouble();</span><br><span class="line">System.out.println(<span class="string">"输入第二个数字"</span>);</span><br><span class="line">num1 = in.nextDouble();</span><br><span class="line">System.out.println(<span class="string">"输入一个运算符"</span>);</span><br><span class="line">symbol = in.next(); </span><br><span class="line"><span class="keyword">if</span>(<span class="string">"+"</span>.equals(symbol))&#123;</span><br><span class="line">    result = num1 + num2;</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">"-"</span>.equals(symbol))&#123;</span><br><span class="line">    result = num1 - num2;</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">"*"</span>.equals(symbol))&#123;</span><br><span class="line">    result = num1 * num2;</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">"/"</span>.equals(symbol))&#123;</span><br><span class="line">    <span class="keyword">if</span>(num2 &lt;= <span class="number">0</span> )&#123;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    result = num1 / num2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这段代码看着是没有什么问题得把，如果实现了功能你是会去想如何扩展呢？还是直接push。</p>
-<blockquote>
-<p>Q1:  如果有1000种运算方法，怎么办？<br>    An: CV</p>
+<p>在学习中间件之前，我觉得最大的一个问题就在于，我们不知道中间件到底用来干嘛，经过我这几个月的工作经验，我来告诉你，中间件大部分都是应用到开发端，也就是开发人员使用，很少会将中间件应用到客户端，比如，公司需要一个任务调度中心来处理一些复杂的业务、数据统计、定时任务时，可能就需要使用消息队列来处理任务，像比较流行的kafka、RocketMQ、RabbitMQ等这类消息队列中间件。当然了，中间件并不就是指这些，它更广泛的意思大概是，【是一类能够为一种或多种应用程序合作互通、资源共享，同时还能够为该应用程序提供相关的服务的软件】(此处copy)，像我们熟知的tomcat、数据库都可以叫做中间件。今天主要讲的是消息队列中间件Kafka。</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><blockquote>
+<ol>
+<li>消息队列的概念<br>消息队列，如果你了解栈的特性【先进后出】，那你对消息队列的理解应该是基本上掌握了，大同小异，<br>队列【先进先出】，其实道理就跟我们平常去银行排队是一个道理，取号排队，数字有序排列，假设银行大厅允许的最大排列范围是十个人，从1-10排满，第一个人走了，11号进来排队。<br>这个概念清楚了，那就没什么难度了，无非就是对框架的掌握程度，各个消息队列框架原理一致，思路与实现不同罢了。</li>
+<li>Kafka入门<br>为什么选择Kafka?因为分布式。<br>kafka是一个开源的消息系统，分布式消息队列，kafka对消息保存时根据topic进行归类，发送消息者称为producer,消息接受者称为consumer,此外kafka集群有多个kafka实例组成，每个实例称为broker。无论是kafka集群，还是producer和consumer都依赖于zookeeper集群保存一些meta信息，来保存系统可用性。<br>看完这个， 你只需要明白几点：<ol>
+<li>producer (生产者) 也就是往消息队列中放入数据的人</li>
+<li>consumer (消费者) 从消息队列中取出数据的人</li>
+<li>我们往一个kafka实例(单个kafka服务)中放入数据时，需要指定某个topic</li>
+<li>分布式kafka时，zoopeeper集群是基础(可以自己尝试搭建zookeeper集群)。<br>同一个时间节点一个消费者组只能有一个消费者消费，并且消费者组中消费者消费的消息不会重复。<br>消费的是某个区，比如消费者2消费了topic1下面的partition0,那么这个组的消费者1不会再去消费topic1下面的partition0。<br>消费单元：partition(区)<br>producer写的时候，同一个分区队列是有序的，不同分区的消息是无序的。<br>分区与消费者组的关系<br>我们在往一个topic下加入消息时，是放入指定的分区下的，这是一个什么概念呢，其实就类似于给topic下的消息分类，默认最少会有一个分区，一般情况下是多个分区<br>如多个消息分区<br>partition0: data1 data2<br>partition1: data3 data4<br>partition1: data5 data6 data7<br>多个消费者<br>consumer1 consumer2 consumer3<br>kafka有自己的分组策略，与之对应的也就有相应的消费策略。<br>按照默认的策略，这个时候consumer1消费的就是data1 data2 data3，consumer2消费的就是data4 data5，consumer3消费的就是data6 data7。<br>补充：默认策略2，轮询消费策略<br>其实上述也就是 <code>一对一模式</code><br>消费者组是一个什么概念呢，其实就是多个consumer被分成了组 关键字:group<br>多个消费者<br>consumer1 consumer2 consumer3 consumer4<br>consumerGroup1:consumer1 consumer2<br>consumerGroup2:consumer3 consumer4<br>这种情况下，一个分区只允许一个消费者组的一个消费者去消费，意思就是，同一个消费者组消费一个分区时，只能消费一次，但不同的消费者组可以消费同一个分区。<br>比如上面的consumerGroup1去消费partition0时，只有consumer1去消费或者consumer2消费，不能同时消费，而partition0可以被consumerGroup1、consumerGroup2消费。也就是<code>一对多模式</code><br>加深一下印象，如下图：<br><img src="/images/queue.png" alt="avatar"></li>
+</ol>
+</li>
+<li>总结<br>关键字：<br>broker：kafka实例，即Kafka服务<br>topic: 主题<br>partition: 分区<br>producer: 消息生产者<br>consumer: 消息消费者<br>Kafka支持的模式：<br>点对点模式(一对一)<br>发布/订阅者模式(一对多)</li>
+</ol>
 </blockquote>
-<blockquote>
-<p>Q2:  如果多个业务需要调用其中一个方法，怎么办？<br>    An: again</p>
-</blockquote>
-<p>问题还有很多，这两个可能是我们可能听闻过的，其实很简单，请看以下分解：<br>num1,num2,result;这三个变量实际上是固定的，所以我们把它封装到一个对象里面： </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span>  <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Operation</span> </span>&#123;</span><br><span class="line">	<span class="comment">//计算需要的数值</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> Number1;  </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> Number2;</span><br><span class="line">	<span class="comment">// get set方法 </span></span><br><span class="line">	<span class="comment">//返回结果的方法  </span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">double</span> <span class="title">getResult</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们是否可以把每个操作看做一个对象，比如加法，这个对象只做只做加法运算，减法只做减法运算,运算的对象来自哪？就是我们刚刚定义的<code>Operation</code>对象。<br>比如把加减乘除运算符拆分成四个对象，并且继承自需要运算的对象： </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OperationAdd</span> <span class="keyword">extends</span> <span class="title">Operation</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getResult</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">super</span>.getNumber1() + <span class="keyword">super</span>.getNumber2();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//乘法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OperationMul</span> <span class="keyword">extends</span> <span class="title">Operation</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getResult</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">super</span>.getNumber1() * <span class="keyword">super</span>.getNumber2(); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//其他操作雷同</span></span><br></pre></td></tr></table></figure>
-<p>重点来了！<br>什么是工厂，我第一意识就是想到了打工的工厂，不同的环节形成了工厂的流水线作业，假如我在一家做饼的工厂的新人，我负责的工作是和面粉，同事1负责的是烧饼，同事2负责的是打包。当我每天上班走到我的岗位的时候，经过了同事2打包的地方，我继续走，因为这不是我的岗位，经过同事1的时候，发现还不是，知道走到二楼，我才找到了我的岗位位置，开始一天的工作。(我实在想不出什么好的例子了)，我们的工厂模式其实也差不多：  </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OperationFactory</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Operation <span class="title">createOperation</span><span class="params">(String operationType)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="string">"+"</span>.equals(operationType))&#123;  <span class="comment">//同事2</span></span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> OperationAdd();</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">"-"</span>.equals(operationType))&#123;  <span class="comment">//同事1</span></span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> OperationSub();</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">"*"</span>.equals(operationType))&#123;  <span class="comment">//我</span></span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> OperationMul();</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="string">"/"</span>.equals(operationType))&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> OperationDiv();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>有没有发现一个特点，就是这个工厂对象里面包含了所有我需要的运算对象，我想要进行某一个运算的时候，直接去这个对象中拿就行了(就像我和我的同事们都被限制在这家工厂中)，当然需要给定你的条件(operationType)</p>
-<p>今天的笔记就到这里。</p>
+<p>学习素材来源：<a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a></p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -173,12 +167,10 @@
     	
     	
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">上一篇</a>
-		
 
 		
 		
-			<a href="/2020/06/04/myblog/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="我拥有自己的blog了！">下一篇</a>
+			<a href="/2020/06/28/designPrinciples/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-设计原则">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -281,7 +273,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/11/simpleFactoryPattern/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/08/29/kafkaGettingStart/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>

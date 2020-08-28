@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://iamlinguo.github.io/"/>
-  <updated>2020-06-27T19:05:48.507Z</updated>
+  <updated>2020-08-28T21:58:08.409Z</updated>
   <id>https://iamlinguo.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Kafka-入门</title>
+    <link href="https://iamlinguo.github.io/2020/08/29/kafkaGettingStart/"/>
+    <id>https://iamlinguo.github.io/2020/08/29/kafkaGettingStart/</id>
+    <published>2020-08-28T20:28:08.679Z</published>
+    <updated>2020-08-28T21:58:08.409Z</updated>
+    
+    <content type="html"><![CDATA[<p>北京时间：2020/08/29<br>近期技术总结</p><hr><p>在学习中间件之前，我觉得最大的一个问题就在于，我们不知道中间件到底用来干嘛，经过我这几个月的工作经验，我来告诉你，中间件大部分都是应用到开发端，也就是开发人员使用，很少会将中间件应用到客户端，比如，公司需要一个任务调度中心来处理一些复杂的业务、数据统计、定时任务时，可能就需要使用消息队列来处理任务，像比较流行的kafka、RocketMQ、RabbitMQ等这类消息队列中间件。当然了，中间件并不就是指这些，它更广泛的意思大概是，【是一类能够为一种或多种应用程序合作互通、资源共享，同时还能够为该应用程序提供相关的服务的软件】(此处copy)，像我们熟知的tomcat、数据库都可以叫做中间件。今天主要讲的是消息队列中间件Kafka。</p><h1 id=""><a href="#" class="headerlink" title=""></a></h1><blockquote><ol><li>消息队列的概念<br>消息队列，如果你了解栈的特性【先进后出】，那你对消息队列的理解应该是基本上掌握了，大同小异，<br>队列【先进先出】，其实道理就跟我们平常去银行排队是一个道理，取号排队，数字有序排列，假设银行大厅允许的最大排列范围是十个人，从1-10排满，第一个人走了，11号进来排队。<br>这个概念清楚了，那就没什么难度了，无非就是对框架的掌握程度，各个消息队列框架原理一致，思路与实现不同罢了。</li><li>Kafka入门<br>为什么选择Kafka?因为分布式。<br>kafka是一个开源的消息系统，分布式消息队列，kafka对消息保存时根据topic进行归类，发送消息者称为producer,消息接受者称为consumer,此外kafka集群有多个kafka实例组成，每个实例称为broker。无论是kafka集群，还是producer和consumer都依赖于zookeeper集群保存一些meta信息，来保存系统可用性。<br>看完这个， 你只需要明白几点：<ol><li>producer (生产者) 也就是往消息队列中放入数据的人</li><li>consumer (消费者) 从消息队列中取出数据的人</li><li>我们往一个kafka实例(单个kafka服务)中放入数据时，需要指定某个topic</li><li>分布式kafka时，zoopeeper集群是基础(可以自己尝试搭建zookeeper集群)。<br>同一个时间节点一个消费者组只能有一个消费者消费，并且消费者组中消费者消费的消息不会重复。<br>消费的是某个区，比如消费者2消费了topic1下面的partition0,那么这个组的消费者1不会再去消费topic1下面的partition0。<br>消费单元：partition(区)<br>producer写的时候，同一个分区队列是有序的，不同分区的消息是无序的。<br>分区与消费者组的关系<br>我们在往一个topic下加入消息时，是放入指定的分区下的，这是一个什么概念呢，其实就类似于给topic下的消息分类，默认最少会有一个分区，一般情况下是多个分区<br>如多个消息分区<br>partition0: data1 data2<br>partition1: data3 data4<br>partition1: data5 data6 data7<br>多个消费者<br>consumer1 consumer2 consumer3<br>kafka有自己的分组策略，与之对应的也就有相应的消费策略。<br>按照默认的策略，这个时候consumer1消费的就是data1 data2 data3，consumer2消费的就是data4 data5，consumer3消费的就是data6 data7。<br>补充：默认策略2，轮询消费策略<br>其实上述也就是 <code>一对一模式</code><br>消费者组是一个什么概念呢，其实就是多个consumer被分成了组 关键字:group<br>多个消费者<br>consumer1 consumer2 consumer3 consumer4<br>consumerGroup1:consumer1 consumer2<br>consumerGroup2:consumer3 consumer4<br>这种情况下，一个分区只允许一个消费者组的一个消费者去消费，意思就是，同一个消费者组消费一个分区时，只能消费一次，但不同的消费者组可以消费同一个分区。<br>比如上面的consumerGroup1去消费partition0时，只有consumer1去消费或者consumer2消费，不能同时消费，而partition0可以被consumerGroup1、consumerGroup2消费。也就是<code>一对多模式</code><br>加深一下印象，如下图：<br><img src="/images/queue.png" alt="avatar"></li></ol></li><li>总结<br>关键字：<br>broker：kafka实例，即Kafka服务<br>topic: 主题<br>partition: 分区<br>producer: 消息生产者<br>consumer: 消息消费者<br>Kafka支持的模式：<br>点对点模式(一对一)<br>发布/订阅者模式(一对多)</li></ol></blockquote><p>学习素材来源：<a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a></p><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;北京时间：2020/08/29&lt;br&gt;近期技术总结&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;在学习中间件之前，我觉得最大的一个问题就在于，我们不知道中间件到底用来干嘛，经过我这几个月的工作经验，我来告诉你，中间件大部分都是应用到开发端，也就是开发人员使用，很少会将中间件应用到客户端，比如，
+      
+    
+    </summary>
+    
+    
+      <category term="中间件" scheme="https://iamlinguo.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>重学设计模式-设计原则</title>
