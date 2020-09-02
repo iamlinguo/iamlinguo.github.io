@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>我拥有自己的blog了！iamLinGuo</title>
+  <title>spring开发-配置文件iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,17 +110,23 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>我拥有自己的blog了！</h4>
-    <time datetime="2020-06-03T18:31:43.518Z"><i class="fa fa-clock-o"></i>2020-06-04</time>
+    <h4>spring开发-配置文件</h4>
+    <time datetime="2020-09-02T14:49:52.912Z"><i class="fa fa-clock-o"></i>2020-09-02</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/04/myblog/" class="views views-post"  title="我拥有自己的blog了！"></span>
+        <span id="/2020/09/02/springConfig/" class="views views-post"  title="spring开发-配置文件"></span>
     </span>
     
     
     
+	
+        <span><i class="fa fa-folder-o"></i>
+    		
+    	       <a href="/categories/%E6%98%A5%E5%A4%A9%E7%B3%BB%E5%88%97/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">春天系列</a>
+    		
+        </span>
 	
     
 </header>
@@ -128,16 +134,33 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>其实之前自己写过一个blog,但是感觉不太好用，所以chrome了一下，发现很多人都在用这个HEXO的静态博客，效果还不错，<br>刚好解决了我的燃眉之急，让我快速短时间的有一个总结的地方，顺便做做技术分享。<br>我一直讲的一句话就是，“生活需要仪式感”。<br>学习，亦是如此<br>所以此时此刻此景，我要开启属于我的生涯，我的技术生涯，我的职场生涯，去追求我所热爱的东西<br>2020-06-07<br>地点：魔都<br>加油吧，少年！</p>
+                <p>现在是北京时间2020-09-02 22:18。<br>近期工作总结</p>
+<hr>
+<h1 id="spring读取配置文件"><a href="#spring读取配置文件" class="headerlink" title="spring读取配置文件"></a>spring读取配置文件</h1><p>声明：<br>.properties文件本质上和.yml文件是没区别的，只不过是写法不同，所以我们在读取的时候也没区别，所以下面说到的.properties文件你可以理解为我也在说yml文件。<br>案例文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#邮箱配置</span><br><span class="line">spring.mail.host=smtp.xxx.com</span><br><span class="line">spring.mail.username=xxx1312222874@<span class="number">163</span>.com</span><br><span class="line">spring.mail.password=xxxxpassword</span><br><span class="line">spring.mail.port=<span class="number">465</span></span><br></pre></td></tr></table></figure>
+<p>假设我们在项目中要读取以上配置并返回到对象当中。</p>
+<h4 id="1-使用-ConfigurationProperties"><a href="#1-使用-ConfigurationProperties" class="headerlink" title="1. 使用@ConfigurationProperties"></a>1. 使用@ConfigurationProperties</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"spring.mail"</span>)</span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">testConfig</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String host;</span><br><span class="line">  <span class="keyword">private</span> String username;</span><br><span class="line">  <span class="keyword">private</span> String password;</span><br><span class="line">  <span class="keyword">private</span> Long port;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解析：<br>注解：@ConfigurationProperties(prefix = “”, value = “”, ignoreInvalidFields = true, ignoreUnknownFields = true)<br><code>ConfigurationProperties</code>主要就是用来加载我们的配置文件的，这个注解由springBoot提供，也是用的最多的。<br><code>prefix</code>：配置文件的前缀<br><code>value</code>: 和prefix作用一样，不信你看源码,跟我们的RequestMapping的path\value一样，<code>@AliasFor</code>这个注解是Spring提供的，主要是在一个类中对两个方法互为别名，但又不冲突</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@AliasFor</span>(<span class="string">"prefix"</span>)</span><br><span class="line"><span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"><span class="meta">@AliasFor</span>(<span class="string">"value"</span>)</span><br><span class="line"><span class="function">String <span class="title">prefix</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br></pre></td></tr></table></figure>
+<p><code>ignoreInvalidFields</code>：忽略读取到的字段，默认false，比如有些字段会存在类型转换错误，这个时候如果不忽略那启动就会报错，如果你设置了ignoreInvalidFields = true，那如果读取到了不匹配的类型会自动忽略，防止不必要的异常，一般情况下肯定都是false，因为谁也不敢保证自己的配置就是对的<br><code>ignoreUnknownFields</code>：同样也是忽略读取到的字段，默认为true，但和<code>ignoreInvalidFields</code>是有区别的，如果读取到的配置名称找不到对应的config类的属性，则忽略，同理。</p>
+<blockquote>
+<p>两个忽略属性最好的区分就是一个在类型上做文章，一个在名称上做文章<br>为什么要加上<code>@Component</code>注解呢？<code>@Component</code>我们都知道，就是注册组件，将这个类注册为bean，这样我们就可以直接用<code>@Autuwired</code>进行注入，如果不注册到spring容器当中是无法使用的，在注册的过程中将配置与属性绑定上去。类似的还可以使用spring的包扫描<br>还有一个小小的提示，就是不要用new对象方式注入config对象哦~</p>
+</blockquote>
+<h4 id="2-使用-ConfigurationProperties-EnableConfigurationProperties"><a href="#2-使用-ConfigurationProperties-EnableConfigurationProperties" class="headerlink" title="2. 使用@ConfigurationProperties + @EnableConfigurationProperties"></a>2. 使用@ConfigurationProperties + @EnableConfigurationProperties</h4><p>刚刚也说了，如果config类只使用了<code>@ConfigurationProperties</code>，没有使用spring的提供的凡是进行注册，那这样是不生效的。<br>要说<code>@ConfigurationProperties</code>和<code>@EnableConfigurationProperties</code>的关系，就是<code>@ConfigurationProperties</code>没有自己注册时，那便要用到<code>@EnableConfigurationProperties</code>来进行注册，<br>注解2：@EnableConfigurationProperties(value = {})，value是一个泛型类<br>前提条件，这两个注解在不同的类上面</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用 @ConfigurationProperties 注解的config类</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"wiggen.uac.provider.dingtalk"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigurationPropertiestest</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String appKey;</span><br><span class="line">  <span class="keyword">private</span> String appSecret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用 @EnableConfigurationProperties 注解的config类</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(&#123; ConfigurationPropertiestest<span class="class">.<span class="keyword">class</span> &#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">	<span class="comment">//springBoot 入口类</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实这样看，你会觉得没有多大用处，但存在即合理。</p>
+<h4 id="3-约束配置类"><a href="#3-约束配置类" class="headerlink" title="3. 约束配置类"></a>3. 约束配置类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConditionalOnProperty</span>(prefix = <span class="string">"spring.mail"</span>, name = <span class="string">"enable"</span>, matchIfMissing = <span class="keyword">false</span>, havingValue = <span class="string">"true"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestConfiguration</span> </span>&#123;</span><br><span class="line">	<span class="comment">//配置内容</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果spring.mail的enable为true时则TestConfiguration生效，反之。<br>注解3：@ConditionalOnProperty(prefix = “”, name = “”, matchIfMissing = , havingValue = “”)<br><code>havingValue</code>: 给定与配置的某个属性比较是否相等，如上面的就是将<code>havingValue</code>的值与spring.mail.enable=?进行比较，如果不匹配，那么整个配置类的内容不生效。<br><code>matchIfMissing</code>：默认为false,缺少name或value指定的属性时，配置类是否生效，比如设置enable没有找到，那么配置文件就不生效，比如配置文件中没有enable这个属性，就无法进行<code>havingValue</code>的值比较，这时候就看配置的<code>matchIfMissing</code>了。<br>@ConditionalOnProperty注解是依赖@Conditional的，@Conditional的作用是根据条件判断这个类是否允许注册到容器当中的，这个有时间可以自己去研究一下。</p>
+<p>总结：<br>现在基本上都叫不到xml的配置了，以前的项目中可能会在resource中定义很多的xml文件，但维护起来会很不方便，如果把配置写成一个类，像业务一样去处理，不仅实现了代码与xml的解耦，也提升了代码的可读性，现在基本上都将配置放在一个独立的package下面，像Service、Controller一样，当然了，随着项目的进展，配置文件的内容肯定是不小的，这就需要我们来给配置文件一些规则了，合理洽淡的运用前缀以及各种分割词、注释，阅读起来其实也很方便。</p>
+<p>学习素材来源：实际工作</p>
+<ul>
+<li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
+</ul>
 
             
         </section>
         <footer class="blog-post-page-tags">
         
-			
-				
-			<a href="/tags/%E5%88%9D%E8%A1%B7/" rel="tag" data-toggle="tooltip" data-placement="top" title="Linux">初衷</a>
-				
 			
 		
         </footer>
@@ -146,10 +169,10 @@
     	
     	
 		
-			<a href="/2020/06/11/simpleFactoryPattern/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="重学设计模式-简单工厂">上一篇</a>
-		
 
 		
+		
+			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="Kafka-入门">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -252,7 +275,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/04/myblog/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/09/02/springConfig/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>
