@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>Kafka-入门iamLinGuo</title>
+  <title>Java8-Stream的使用iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>Kafka-入门</h4>
-    <time datetime="2020-08-28T20:28:08.679Z"><i class="fa fa-clock-o"></i>2020-08-29</time>
+    <h4>Java8-Stream的使用</h4>
+    <time datetime="2020-09-10T17:56:37.343Z"><i class="fa fa-clock-o"></i>2020-09-11</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/08/29/kafkaGettingStart/" class="views views-post"  title="Kafka-入门"></span>
+        <span id="/2020/09/11/java8SEStream/" class="views views-post"  title="Java8-Stream的使用"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">中间件</a>
+    	       <a href="/categories/Java8/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">Java8</a>
     		
         </span>
 	
@@ -134,23 +134,65 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>北京时间：2020/08/29<br>近期技术总结</p>
+                <p>现在是北京时间2020-09-11 12:30。<br>每日总结</p>
 <hr>
-<p>在学习中间件之前，我觉得最大的一个问题就在于，我们不知道中间件到底用来干嘛，经过我这几个月的工作经验，我来告诉你，中间件大部分都是应用到开发端，也就是开发人员使用，很少会将中间件应用到客户端，比如，公司需要一个任务调度中心来处理一些复杂的业务、数据统计、定时任务时，可能就需要使用消息队列来处理任务，像比较流行的kafka、RocketMQ、RabbitMQ等这类消息队列中间件。当然了，中间件并不就是指这些，它更广泛的意思大概是，【是一类能够为一种或多种应用程序合作互通、资源共享，同时还能够为该应用程序提供相关的服务的软件】(此处copy)，像我们熟知的tomcat、数据库都可以叫做中间件。今天主要讲的是消息队列中间件Kafka。</p>
-<h1 id=""><a href="#" class="headerlink" title=""></a></h1><blockquote>
-<ol>
-<li>消息队列的概念<br>消息队列，如果你了解栈的特性【先进后出】，那你对消息队列的理解应该是基本上掌握了，大同小异，<br>队列【先进先出】，其实道理就跟我们平常去银行排队是一个道理，取号排队，数字有序排列，假设银行大厅允许的最大排列范围是十个人，从1-10排满，第一个人走了，11号进来排队。<br>这个概念清楚了，那就没什么难度了，无非就是对框架的掌握程度，各个消息队列框架原理一致，思路与实现不同罢了。</li>
-<li>Kafka入门<br>为什么选择Kafka?因为分布式。<br>kafka是一个开源的消息系统，分布式消息队列，kafka对消息保存时根据topic进行归类，发送消息者称为producer,消息接受者称为consumer,此外kafka集群有多个kafka实例组成，每个实例称为broker。无论是kafka集群，还是producer和consumer都依赖于zookeeper集群保存一些meta信息，来保存系统可用性。<br>看完这个， 你只需要明白几点：<ol>
-<li>producer (生产者) 也就是往消息队列中放入数据的人</li>
-<li>consumer (消费者) 从消息队列中取出数据的人</li>
-<li>我们往一个kafka实例(单个kafka服务)中放入数据时，需要指定某个topic</li>
-<li>分布式kafka时，zoopeeper集群是基础(可以自己尝试搭建zookeeper集群)。<br>同一个时间节点一个消费者组只能有一个消费者消费，并且消费者组中消费者消费的消息不会重复。<br>消费的是某个区，比如消费者2消费了topic1下面的partition0,那么这个组的消费者1不会再去消费topic1下面的partition0。<br>消费单元：partition(区)<br>producer写的时候，同一个分区队列是有序的，不同分区的消息是无序的。<br>分区与消费者组的关系<br>我们在往一个topic下加入消息时，是放入指定的分区下的，这是一个什么概念呢，其实就类似于给topic下的消息分类，默认最少会有一个分区，一般情况下是多个分区<br>如多个消息分区<br>partition0: data1 data2<br>partition1: data3 data4<br>partition1: data5 data6 data7<br>多个消费者<br>consumer1 consumer2 consumer3<br>kafka有自己的分组策略，与之对应的也就有相应的消费策略。<br>按照默认的策略，这个时候consumer1消费的就是data1 data2 data3，consumer2消费的就是data4 data5，consumer3消费的就是data6 data7。<br>补充：默认策略2，轮询消费策略<br>其实上述也就是 <code>一对一模式</code><br>消费者组是一个什么概念呢，其实就是多个consumer被分成了组 关键字:group<br>多个消费者<br>consumer1 consumer2 consumer3 consumer4<br>consumerGroup1:consumer1 consumer2<br>consumerGroup2:consumer3 consumer4<br>这种情况下，一个分区只允许一个消费者组的一个消费者去消费，意思就是，同一个消费者组消费一个分区时，只能消费一次，但不同的消费者组可以消费同一个分区。<br>比如上面的consumerGroup1去消费partition0时，只有consumer1去消费或者consumer2消费，不能同时消费，而partition0可以被consumerGroup1、consumerGroup2消费。也就是<code>一对多模式</code><br>加深一下印象，如下图：<br><img src="/images/queue.png" alt="avatar"></li>
-</ol>
-</li>
-<li>总结<br>关键字：<br>broker：kafka实例，即Kafka服务<br>topic: 主题<br>partition: 分区<br>producer: 消息生产者<br>consumer: 消息消费者<br>Kafka支持的模式：<br>点对点模式(一对一)<br>发布/订阅者模式(一对多)</li>
-</ol>
+<h1 id="Stream（流）"><a href="#Stream（流）" class="headerlink" title="Stream（流）"></a>Stream（流）</h1><pre><code>jdk1.8的诞生，很多情况下都减少了我们编写的代码量，最重要的两个特性，
+第一个是函数式编程，
+第二个就是Stream。</code></pre><hr>
+<h3 id="一、Stream是什么？"><a href="#一、Stream是什么？" class="headerlink" title="一、Stream是什么？"></a>一、Stream是什么？</h3><pre><code>Stream叫做流，像我们以前用的字节流、字符流，但和Stream本意是有天壤之别的，前者是我们所说的数据，数据按顺序排列组成的一段很长的有序字符串，抽象出来的一个名词，叫做流，而Stream虽然也是抽象，但更倾向于一个管道，一个处理数据的工具，数据经由它最后形成一个新的数据集合。</code></pre><h3 id="二、Stream用来干嘛？"><a href="#二、Stream用来干嘛？" class="headerlink" title="二、Stream用来干嘛？"></a>二、Stream用来干嘛？</h3><pre><code>Stream就是用来对集合来进行处理的，基本上我们对一个集合的操作都可以用它来完成，例如过滤，排序，分组，容器类型的转换，甚至在某些业务场景下，由于查询的基数太大，条件查询速度太慢，都可以使用Stream，毕竟在数据库中处理肯定是没有在内存中处理快的。
+举例：
+用户表中有100000条数据
+表结构： user_id,name,age,parent_id
+转载用户的容器：List&lt;User&gt; users = new ArrayList&lt;&gt;();
+##### 1.查询age&gt;18的  
+SQL: select * from user where age &gt; 18
+users.size() ===== 70000;
+... 查询出来的70000条数据可能会结果一些业务处理，或者Bo，DTO的转换封装
+##### 2.在步骤1的基础上，将parent_id不存在的user_id去除
+在没有Stream的情况下，有什么好办法嘛，无非就是通过循环去判断，还有就是就是重新去查一遍数据 
+SQL: select * from user where  id in (select distinct(parent_id) from user where age &gt; 18 ) ;
+最终拿到结果users.size() ===== 50000
+这样做是非常不爽的，循环的效率太低，可能还要嵌套多个，左思右想怎么优化，用SQL重新查询一遍又太浪费，最终业务代码太复杂 。
+
+针对第二个的业务问题，这个时候Stream登场了，针对刚刚的操作分为两步解决
+##### 1. 得到所有parent_id  
+List&lt;Long&gt; parentIds = users.stream().map(item -&gt; item.getParentId).distinct().collect(Collectors.toList());
+##### 2. 判断user_id是否存在于parent_id，最后完成组装 
+users = user.stream().filter(item -&gt; parentIds.contains(item.getUserId)).collect(Collectors.toList());
+最后就拿到了处理后的50000数据 
+
+是不是感觉很清晰，代码也易读。</code></pre><h3 id="三、Stream详解："><a href="#三、Stream详解：" class="headerlink" title="三、Stream详解："></a>三、Stream详解：</h3><pre><code>Stream是一个接口，里面定义了很多方法，常见的有filter、map、sorted、collect等。
+`filter`:过滤
+    filter(对象名称自定义 -&gt; 过滤的内容(true\false)), 当值为true时，对象才能进入下一个方法执行
+    举例： 过滤age&gt;18 并且姓名不为空的用户 
+    users = users.stream().filter(item -&gt; null != item.getName &amp;&amp;  item.getAge()&gt;18).collect(Collectors.toList());
+`map`:对当前操作对象进行重新定义  
+    map(对象名称自定义 -&gt; 返回一个新的对象)
+    举例： 组装新的UserBo对象
+    List&lt;UserBo&gt; userBoss = users.stream().map(item -&gt; {
+    return new UserBo(item.userName,item.getAge(),item.getWeight());
+    }).collect(Collectors.toList());
+`sorted`:排序 
+    sorted(比较器(Comparator))
+    举例：对users按年龄降序，如果一致则按体重升序    users.stream().sorted(Comparator.comparing(User::getAge).reversed().thenComparing(User::getWeight)).collect(Collectors.toList());
+`collect`:最终组装的结果
+    最终需要的结果多种多样，最常见的就是返回结果本身类型，但也有很多情况需要转为其他数据格式
+    举例：users按parent_id分组
+    Map&lt;Long,List&lt;User&gt;&gt; usersMap = users.stream().collect(Collectors.groupingBy(User::getParentId()));
+`distinct`：去重 
+`limit`：返回前n个元素</code></pre><p>Stream还提供了很多的方法，我对它的理解就是，跟我们SQL的where差不多了，你能想到的，基本上都可以用Stream实现。</p>
+<p>另外一些常用的例子，没仔细学习了，就几种写法。<br>    举例：去除users的重复用户名称<br>    users.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -&gt; new TreeSet&lt;&gt;(Comparator.comparing(User :: getUserName))), ArrayList::new));</p>
+<p>有些复杂业务的情况下，通常都需要我们自定义方法去使用的，比如调用map进行对象组装时，可能里面掺杂了很复杂的业务，这时候最好是自己写一个额外的方法，在map中使用即可，其他方法同理，别问为什么，问就是函数式编程。</p>
+<blockquote>
+<p>总结：<br>Stream的三个操作步骤：<br>创建Stream&gt;中间操作(过滤排序组装)&gt;终止操作(结果集)</p>
 </blockquote>
-<p>学习素材来源：<a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a></p>
+<p>注意点：</p>
+<ol>
+<li>自身不存储元素</li>
+<li>不改变源数据</li>
+<li>惰性执行(执行终止操作时才会依次执行中间操作)</li>
+</ol>
+<p>惰性，啊哈，结语：克服惰性，实现理想</p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -167,12 +209,10 @@
     	
     	
 		
-			<a href="/2020/09/02/springConfig/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="spring开发-配置文件">上一篇</a>
-		
 
 		
 		
-			<a href="/2020/06/28/designPrinciples/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-设计原则">下一篇</a>
+			<a href="/2020/09/10/DecoratorPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-装饰模式">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -275,7 +315,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/08/29/kafkaGettingStart/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/09/11/java8SEStream/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>
