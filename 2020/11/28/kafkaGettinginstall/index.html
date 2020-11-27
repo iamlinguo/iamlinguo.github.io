@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-设计原则iamLinGuo</title>
+  <title>Kafka-集群搭建iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-设计原则</h4>
-    <time datetime="2020-06-27T18:39:01.375Z"><i class="fa fa-clock-o"></i>2020-06-28</time>
+    <h4>Kafka-集群搭建</h4>
+    <time datetime="2020-11-27T17:50:05.534Z"><i class="fa fa-clock-o"></i>2020-11-28</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/28/designPrinciples/" class="views views-post"  title="重学设计模式-设计原则"></span>
+        <span id="/2020/11/28/kafkaGettinginstall/" class="views views-post"  title="Kafka-集群搭建"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">中间件</a>
     		
         </span>
 	
@@ -134,21 +134,16 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p>
-<hr>
-<h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote>
-<ol>
-<li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li>
-<li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li>
-<li>依赖倒置（依赖倒转）原则<br>定义：<ol>
-<li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li>
-<li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li>
+                <hr>
+<pre><code>海阔凭鱼跃，天高任鸟飞。</code></pre><hr>
+<h1 id="安装的一些知识"><a href="#安装的一些知识" class="headerlink" title="安装的一些知识"></a>安装的一些知识</h1><ol>
+<li>启动kafka集群的基础是依赖于zookeeper集群，通过zookeeper服务去连接，没有zk也就没有kafka集群，所以分布式中很多都是基于zk的。</li>
+<li>必要的server.properties配置需要修改<br>broker.id= 0 or 1 or other  kafka集群区分 每个实例的区分，记得之前的zk也是按照一个id进行区分<br>zookeeper.connect = zookeeper注册地址 多个用,分割<br>listeners =  listener_name://host_name:port  kafka本机的地址<br>log.dirs = kafka的数据目录</li>
 </ol>
-</li>
-<li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li>
-</ol>
-</blockquote>
-<p>学习素材来源：《大话设计模式》–程杰</p>
+<p>kafka启动在根目录下<br>常规启动: <code>bin/kafka-server-start.sh config/server.properties</code>    脚本+ kafka本机配置<br>这样启动的方式弊端在于，只要你退出进程就会关闭。<br>进程启动:  <code>nohup bin/kafka-server-start.sh config/server.properties &gt;/dev/null 2&gt;&amp;1 &amp;</code><br>其实就是后台启动，就像你挂QQ升级一样。<br>停止： <code>bin/kafka-server-stop.sh</code></p>
+<h1 id="linux命令"><a href="#linux命令" class="headerlink" title="linux命令"></a>linux命令</h1><p>netstat 查看系统的网络状态<br>ctrl+c 退出当前程序<br>tail -f xx 实时查看日志文本</p>
+<p>如果遇到集群启动失败，仔细检查防火墙、网络、配置文件、zk集群是否正常，作为一个新手，都是我走过的坑，所以有问题先看是否是其中。</p>
+<p>聊聊我司对kafka的使用情况。<br>我目前只接触过一个场景，就是利用kafka的消息系统。<br>业务涉及内容：任务发起方，kafka消息，kafka消息处理。<br>在我司的任务调度系统中，使用的是xxl开源系统，定时执行任务脚本，将第三方数据读取到我司数据库或将本地数据做定时数据统计，生成业务表单发送到邮件或钉钉或直接写入<br>数据库做更新。<br>以钉钉告警为例：检查店员头像缺失告警<br>在xxlJob中实现任务，检测数据库中是否存在店员头像缺失，如果有缺失，将消息发送至钉钉告警群作提示。<br>任务定时每周凌晨执行，类似这样的场景还有很多很多，可能凌晨存在100个任务同时执行，但消费系统(推送到钉钉的单独服务)可能无法承受，这时我们引入kafka作为疏通管道，<br>每个任务跑完后将消息发送到kafka排队，等待消费系统挨个读取(消费系统可能由集群组成)，消费系统将kafka中的消息拉取后调用第三方接口推送消息。</p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -165,12 +160,12 @@
     	
     	
 		
-			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-入门">上一篇</a>
+			<a href="/2020/11/28/distributed_springboot_1/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="分布式-springboot">上一篇</a>
 		
 
 		
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">下一篇</a>
+			<a href="/2020/11/28/distributed_zookeeper_2/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="分布式-zookeeper[2]">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -273,7 +268,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/28/designPrinciples/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/11/28/kafkaGettinginstall/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>

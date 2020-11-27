@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-设计原则iamLinGuo</title>
+  <title>分布式-zookeeper[1]iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-设计原则</h4>
-    <time datetime="2020-06-27T18:39:01.375Z"><i class="fa fa-clock-o"></i>2020-06-28</time>
+    <h4>分布式-zookeeper[1]</h4>
+    <time datetime="2020-11-27T17:38:28.425Z"><i class="fa fa-clock-o"></i>2020-11-28</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/28/designPrinciples/" class="views views-post"  title="重学设计模式-设计原则"></span>
+        <span id="/2020/11/28/distributed_zookeeper_1/" class="views views-post"  title="分布式-zookeeper[1]"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">分布式</a>
     		
         </span>
 	
@@ -134,21 +134,24 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p>
-<hr>
-<h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote>
-<ol>
-<li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li>
-<li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li>
-<li>依赖倒置（依赖倒转）原则<br>定义：<ol>
-<li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li>
-<li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li>
+                <hr>
+<pre><code>打铁还需自身硬。</code></pre><hr>
+<h1 id="zookeeper的理论知识"><a href="#zookeeper的理论知识" class="headerlink" title="zookeeper的理论知识"></a>zookeeper的理论知识</h1><p>随着发展，集中式演变到分布式，在分布式中存在一致性的问题，在分布式的模型下， 需要一个系统或组件来解决一致性的问题。–分布式协调组件–zookeeper  </p>
+<h3 id="什么是zookeeper"><a href="#什么是zookeeper" class="headerlink" title="什么是zookeeper?"></a>什么是zookeeper?</h3><p>zookeeper是一个开放源码的分布式服务协调组件，高性能的一致性解决方案，将一些复杂的分布式一致性服务封装起来，构成一个可靠的原语集，提供简单的接口给用户使用。 </p>
+<h3 id="提供了那些特性？"><a href="#提供了那些特性？" class="headerlink" title="提供了那些特性？"></a>提供了那些特性？</h3><ol>
+<li>顺序一致性，客户端的更新顺序与他们发送的顺序一致</li>
+<li>原子性，要么全成功要么失败</li>
+<li>单一视图，无论客户端连接到哪一个服务器，都看到相同的zookeeper视图 </li>
+<li>可靠性，一个更新操作完后，客户端再次更新之前，值不会改变 </li>
+<li>实时性，特定的一段时间内，系统任何变更都会被客户端检测到。 </li>
 </ol>
-</li>
-<li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li>
+<h3 id="zookeeper的工作过程"><a href="#zookeeper的工作过程" class="headerlink" title="zookeeper的工作过程"></a>zookeeper的工作过程</h3><p>zookeeper集群启动后，会进行leader选举，其他的服务都是follower，并且和leader建立连接，用户数据同步和请求转发等。比如有请求落到follower机器上的时候，<br>follower机器会把请求转发给leader，由leader处理该请求，比如数据的写，在请求处理完之后再把数据同步到所有的follower  </p>
+<h3 id="zookeeper和CAP的关系"><a href="#zookeeper和CAP的关系" class="headerlink" title="zookeeper和CAP的关系"></a>zookeeper和CAP的关系</h3><p>任何的分布式模型下，都是无法保证一致性，可用性，分区容错性的，只能保证其中两个，比如ACID就是保证了CA，不需要分区，著名的base理论也是保证了AP丢弃了C，<br>但是会保留最终一致性。zookeeper保证了CP丢弃了A，没有容错性也就谈不上分布式了，没有一致性，那后果也是很严重的，也是在极端情况下，当集群垮掉，<br>丢掉可用性，下次再请求。</p>
+<h3 id="zookeeper中的角色"><a href="#zookeeper中的角色" class="headerlink" title="zookeeper中的角色"></a>zookeeper中的角色</h3><ol>
+<li>leader: 负责进行投票的发起和决议，更新系统的状态，为客户端提供读和写的服务 </li>
+<li>follower:用于接收客户端的请求并像客户端返回结果，参与leader选举，为客户端提供读的服务，</li>
+<li>observer观察者，接收客户端连接，将写的请求转发给leader，但是不参与leader的选举，只同步leader的状态，observer是为了扩展系统，提高读取速度<br>客户端。  </li>
 </ol>
-</blockquote>
-<p>学习素材来源：《大话设计模式》–程杰</p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -165,12 +168,12 @@
     	
     	
 		
-			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-入门">上一篇</a>
+			<a href="/2020/11/28/distributed_zookeeper_2/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="分布式-zookeeper[2]">上一篇</a>
 		
 
 		
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">下一篇</a>
+			<a href="/2020/11/28/distributed_2/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="分布式的一致性">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -273,7 +276,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/28/designPrinciples/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/11/28/distributed_zookeeper_1/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>

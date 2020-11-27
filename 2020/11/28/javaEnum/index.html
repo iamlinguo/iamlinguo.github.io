@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-设计原则iamLinGuo</title>
+  <title>好看的枚举iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-设计原则</h4>
-    <time datetime="2020-06-27T18:39:01.375Z"><i class="fa fa-clock-o"></i>2020-06-28</time>
+    <h4>好看的枚举</h4>
+    <time datetime="2020-11-27T18:43:59.445Z"><i class="fa fa-clock-o"></i>2020-11-28</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/28/designPrinciples/" class="views views-post"  title="重学设计模式-设计原则"></span>
+        <span id="/2020/11/28/javaEnum/" class="views views-post"  title="好看的枚举"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/java%E5%9F%BA%E7%A1%80/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">java基础</a>
     		
         </span>
 	
@@ -134,21 +134,41 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p>
-<hr>
-<h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote>
-<ol>
-<li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li>
-<li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li>
-<li>依赖倒置（依赖倒转）原则<br>定义：<ol>
-<li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li>
-<li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li>
-</ol>
-</li>
-<li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li>
-</ol>
-</blockquote>
-<p>学习素材来源：《大话设计模式》–程杰</p>
+                <hr>
+<pre><code>fuck,我连枚举都不会。</code></pre><hr>
+<p>枚举使用的地方很多很多很多。重要的事说三遍。<br>举例：<br>以前我们在表中对数据做类型区分的时候，很多情况下都会使用1,2,3数字来区分代替，然后在代码中写一段if来区分，最后可能写的自己都忘记了，如果业务够复杂的话，基本上过<br>几天自己写的代码都想不起来什么意思了，除非你写了足够多的注释，不然真就隔三日对(代码)刮目相看。<br>我司之前的一个项目是外包出去的，一个线上商城，最近人手够了，我们也参与其中，大家开始纷纷吐槽，shit…这什么意思，谁来告诉我!这段代码谁看得懂，卧槽。类似这样的<br>话我听到不少，包括我过去写的代码也是这样让别人看不懂。<br>其实类似这样的场景可以使用枚举处理，举个栗子，服装有上衣、下装、鞋服配等几大类型，1=上衣，2=下装…依次。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(type == <span class="number">1</span>)</span><br><span class="line"> sout(<span class="string">"衣服"</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(type == <span class="number">3</span>)</span><br><span class="line"> sout(<span class="string">"鞋子"</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="优化一下上面的代码"><a href="#优化一下上面的代码" class="headerlink" title="优化一下上面的代码"></a>优化一下上面的代码</h3><p>首先我们定义表结构的时候使用字符串形式 – varchar<br>定义枚举类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> clothesType&#123;</span><br><span class="line"></span><br><span class="line">	JACKET(<span class="string">"上装"</span>),BOTTOMS(<span class="string">"下装"</span>),SHOES(<span class="string">"鞋子"</span>);  <span class="comment">//枚举值</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> desc; <span class="comment">// 枚举描述 对应括号中的内容  </span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">clothesType</span><span class="params">(String desc)</span></span>&#123;   <span class="comment">//枚举的构造函数，我们使用枚举的时候，这个参数的值就是括号中的内容</span></span><br><span class="line">		<span class="keyword">this</span>.desc = desc;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用枚举来判断  </span></span><br><span class="line"><span class="keyword">if</span>(clothesType.JACKET == type)</span><br><span class="line">	sout(<span class="string">"衣服"</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(clothesType.BOTTOMS == type)</span><br><span class="line">	sout(<span class="string">"鞋子"</span>)</span><br></pre></td></tr></table></figure>
+<p>这样的代码绝对能人别人一目了然，看得懂。</p>
+<p>有小朋友开始问了，我从数据库中读取出来的是字符串啊！怎么比值啊？<br>我们再对枚举类做一些优化</p>
+<pre><code class="java"><span class="keyword">public</span> <span class="keyword">enum</span> clothesType{
+
+    JACKET(<span class="string">"上装"</span>),BOTTOMS(<span class="string">"下装"</span>),SHOES(<span class="string">"鞋子"</span>);  <span class="comment">//枚举值</span>
+
+    <span class="keyword">private</span> <span class="keyword">final</span> desc; <span class="comment">// 枚举描述 对应括号中的内容  </span>
+
+    <span class="function"><span class="keyword">private</span> <span class="title">clothesType</span><span class="params">(String desc)</span></span>{   <span class="comment">//枚举的构造函数，我们使用枚举的时候，这个参数的值就是括号中的内容</span>
+        <span class="keyword">this</span>.desc = desc;
+    }
+
+    <span class="comment">// 通过枚举值即名称或描述来转换成枚举</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> clothesType <span class="title">parse</span><span class="params">(String nameOrDesc)</span></span>{
+        <span class="keyword">for</span>(clothesType item : clothesType.values()){  <span class="comment">//遍历所有的枚举值</span>
+            <span class="keyword">if</span>(item.desc.equals(nameOrDesc) || item.name().equals(nameOrDesc)){
+                <span class="keyword">return</span> item; <span class="comment">// 存在的枚举值返回</span>
+            }
+        }
+    }
+}
+
+
+<span class="comment">//使用枚举来判断  假设type是字符串 </span>
+<span class="keyword">if</span>(clothesType.JACKET == clothesType.parse(type))
+    sout(<span class="string">"衣服"</span>);
+<span class="keyword">else</span> <span class="keyword">if</span>(clothesType.BOTTOMS == clothesType.parse(type))
+    sout(<span class="string">"鞋子"</span>)</code></pre>
+<p>枚举是可以直接使用==来判断的哦。<br>同样括号中的值也可以有多个”,”分割，比如根据前缀或后缀匹配做枚举转换。</p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -165,12 +185,12 @@
     	
     	
 		
-			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-入门">上一篇</a>
+			<a href="/2020/11/28/javaRestful/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Restful风格的接口设计">上一篇</a>
 		
 
 		
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">下一篇</a>
+			<a href="/2020/11/28/distributed_springboot_2/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="分布式-springboot事务控制">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -273,7 +293,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/28/designPrinciples/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/11/28/javaEnum/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>

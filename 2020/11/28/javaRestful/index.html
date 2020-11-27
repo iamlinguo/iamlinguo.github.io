@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-设计原则iamLinGuo</title>
+  <title>Restful风格的接口设计iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-设计原则</h4>
-    <time datetime="2020-06-27T18:39:01.375Z"><i class="fa fa-clock-o"></i>2020-06-28</time>
+    <h4>Restful风格的接口设计</h4>
+    <time datetime="2020-11-27T19:11:30.023Z"><i class="fa fa-clock-o"></i>2020-11-28</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/28/designPrinciples/" class="views views-post"  title="重学设计模式-设计原则"></span>
+        <span id="/2020/11/28/javaRestful/" class="views views-post"  title="Restful风格的接口设计"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/java%E5%9F%BA%E7%A1%80/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">java基础</a>
     		
         </span>
 	
@@ -134,21 +134,21 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p>
-<hr>
-<h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote>
-<ol>
-<li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li>
-<li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li>
-<li>依赖倒置（依赖倒转）原则<br>定义：<ol>
-<li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li>
-<li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li>
-</ol>
-</li>
-<li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li>
-</ol>
-</blockquote>
-<p>学习素材来源：《大话设计模式》–程杰</p>
+                <hr>
+<pre><code>好好写接口，让前端少些抱怨</code></pre><hr>
+<p>说到接口，不同的场景有不同的样式。<br>通常我们在接口设计中，很多接口都是/url/suburl/subdetails类似这样的格式，无限扩张接口拼接，其实这样很不美观，如果一个controller的接口过多，也不方便管理</p>
+<h1 id="Restful接口"><a href="#Restful接口" class="headerlink" title="Restful接口"></a>Restful接口</h1><h3 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h3><p>按照请求方式，我们常用的几种：<br>get：常用查询，获取列表或详情<br>post: 常用新增<br>put: 常用大幅度的数据修改<br>patch：局部的数据修改，比如禁用启用<br>delete: 常用删除</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(path = <span class="string">"/product"</span>,name=<span class="string">"商品接口"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">productController</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@GetMapping</span>(path= <span class="string">""</span>,name=<span class="string">"商品列表"</span>)</span><br><span class="line">	<span class="keyword">public</span> .. </span><br><span class="line"></span><br><span class="line">	<span class="meta">@PostMapping</span>(path = <span class="string">""</span> , name = <span class="string">"新增接口"</span>)</span><br><span class="line">	<span class="keyword">public</span> ...</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@PutMapping</span>(path = <span class="string">""</span> , name = <span class="string">"修改接口"</span>)</span><br><span class="line">	<span class="keyword">public</span> ...</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@DeleteMapping</span>(path = <span class="string">"/&#123;id&#125;"</span> , name = <span class="string">"删除接口"</span>)</span><br><span class="line">	<span class="keyword">public</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一套CRUD的接口应该是如上所述的，并不需要过多的子url<br>如果接口中存在详细扩展，比如详情的查询或扩散的接口，有两种定义方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(path = <span class="string">"/product"</span>,name=<span class="string">"商品接口"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">productController</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@GetMapping</span>(path = <span class="string">"/details"</span> , name = <span class="string">"详情接口"</span>)</span><br><span class="line">	<span class="keyword">public</span> ...</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@GetMapping</span>(path = <span class="string">""</span> , name = <span class="string">"详情接口"</span> , params = <span class="string">"method = details"</span>)</span><br><span class="line">	<span class="keyword">public</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果详情也有CRUD，一般情况下推荐使用第二种，否则使用url拼接即可    </p>
+<h3 id="返回值定义"><a href="#返回值定义" class="headerlink" title="返回值定义"></a>返回值定义</h3><p>正常的做法，一般都是定义抽象类，封装响应码，响应信息，响应数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RestResponse</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">	Integer code ; <span class="comment">// 响应码</span></span><br><span class="line">	String msg;  <span class="comment">//响应信息</span></span><br><span class="line">	T data; <span class="comment">//响应数据  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>分页数据封装：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PageData</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">	Integer total;</span><br><span class="line">	List&lt;T&gt; rows; <span class="comment">//响应数据  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果分页响应的数据需要扩展，直接继承PageData。<br>如此一来，一套简洁完美的接口便定义好了。</p>
+<p>其他的响应接口，比如javaweb，就可能随意一点了，看后台选什么模板把<br>再比如我们写小程序接口的时候，所有的请求形式都定义为了POST请求，响应格式也是<code>text/html; charset=UTF-8</code>，统一的做法都是封装一个HttpServletResponse的响应工具类<br>重写ContentType。</p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -165,12 +165,10 @@
     	
     	
 		
-			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-入门">上一篇</a>
-		
 
 		
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">下一篇</a>
+			<a href="/2020/11/28/javaEnum/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="好看的枚举">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -273,7 +271,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/28/designPrinciples/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/11/28/javaRestful/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>

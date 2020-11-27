@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-设计原则iamLinGuo</title>
+  <title>分布式-springbootiamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-设计原则</h4>
-    <time datetime="2020-06-27T18:39:01.375Z"><i class="fa fa-clock-o"></i>2020-06-28</time>
+    <h4>分布式-springboot</h4>
+    <time datetime="2020-11-27T18:21:27.519Z"><i class="fa fa-clock-o"></i>2020-11-28</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/28/designPrinciples/" class="views views-post"  title="重学设计模式-设计原则"></span>
+        <span id="/2020/11/28/distributed_springboot_1/" class="views views-post"  title="分布式-springboot"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">分布式</a>
     		
         </span>
 	
@@ -134,21 +134,28 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p>
-<hr>
-<h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote>
+                <hr>
+<pre><code>让cv成为create</code></pre><hr>
+<h1 id="springboot知识"><a href="#springboot知识" class="headerlink" title="springboot知识"></a>springboot知识</h1><p>创建一个springboot项目，使用maven打包构建工具，不再像ssm项目一样累赘，编写大量的配置文件，同时springboot内置了tomcat容器。<br>搭建好了第一个springboot项目之后，启动类上会有一个注解：<br>@SpringBootApplication<br>使用这个注解的前提是，启动类一定是在构建项目时的包下面，因为约束大于配置，这是使用maven必须承担的。<br>在@SpringBootApplication这个注解下还包含：<br>@ComponentScan：这是在SpringBoot中非常重要的一个注解，它会去扫描符合条件的包或者类(比如@Service、@Controller)，然后注入到容器中。<br>@EnableAutoConfigure:<br>这个注解是SpringBoot的自动装配，也就是加载第三方jar包到容器当中，在Springboot的启动过程中，会去spring-boot-autoconfigure.jar下面找到对应的<br>spring.factories文件，根据文件里面的键值对数据去查找对应的class文件，如果该类符合条件就注入到容器中，并且注入的这个类在依赖其他jar包的情况下，<br>依赖的jar包又有相应的依赖，都会被注入到容器当中，形成一条引用链。<br>tip:<br>这里说一下mybatis是如何抹掉xml文件的，在mybatis-springboot-autoconfigure这个jar包下面，有对应的mybatis的配置类MybatisProperties,这个类中包含了<br>我们xml文件当中对应的标签且被@ConfigurationProperties标识，所以每次springboot加载项目的时候会注入这个类，去根据属性名称寻找application.yml中对应的配置项。<br>springboot的默认配置文件只有:application.properties和application.yml。除此之外的都不是默认配置，不是默认配置文件需要用@PropertySource来加载。<br>另外，因为springboot帮我们配置了类似mybatis.xml文件，如果一定要使用自定义的文件就用@ImportResource加载自定义的配置类<br>配置类：</p>
+<pre><code class="java"><span class="meta">@Configuration</span>   <span class="comment">//加上他之后这个类就是配置类</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>{
+    <span class="meta">@Bean</span><span class="comment">//加上它之后就相当于创建了一个&lt;bean&gt;&lt;/bean&gt;标签</span>
+    <span class="function"><span class="keyword">public</span> PetPo <span class="title">ppp</span><span class="params">()</span> </span>{<span class="comment">/*ppp相当于&lt;bean id="" class=""&gt;&lt;/bean&gt;中的id*/</span>
+        PetPo p=<span class="keyword">new</span> PetPo();
+        <span class="keyword">return</span> p;
+    <span class="comment">/*返回的结果类型就相当于&lt;bean id="" class=""&gt;&lt;/bean&gt;中的class*/</span>
+    }
+}</code></pre>
+<p>springboot的多文件设置及切换<br>默认情况端口号下是读取默认的application.properties的，也叫主配置文件。<br>多个环境时，配置文件应为：<br>application-环境名.properties；<br>比如application-dev.properties;application-test.properties;<br>拿端口为例：<br>主配置文件：<br>server.port = 8080<br>application-dev.properties：<br>server.port = 8081<br>spring.profiles:dev //声明环境为开发<br>application-test.properties:<br>server.port = 8082<br>spring.profiles:test //声明环境为测试<br>这样就代表配置好了三个环境，如果需要将默认主环境切到开发环境：<br>spring.profiles.active=dev  //切换到开发环境的端口下  </p>
+<p>如何动态的切换数据源：<br>1.右单击 -&gt;Run As-&gt;RunConfigurations-&gt;Arguments-&gt;在里面输入–spring.profiles.active=环境名<br>比如：–spring.profiles.active=dev<br>2.打成jar包，然后使用命令行运行<br>java -jar HelloWord-0.0.1-SNAPSHOT.jar –spring.profiles.active=dev  </p>
+<p>之前经常看到旁边的测试同志打包的时候都是通过这个命令切换配置文件</p>
+<p>使用外部的配置文件：</p>
 <ol>
-<li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li>
-<li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li>
-<li>依赖倒置（依赖倒转）原则<br>定义：<ol>
-<li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li>
-<li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li>
+<li>右单击 -&gt;Run As-&gt;RunConfigurations-&gt;Arguments-&gt;在里面输入–spring.config.location=路径名<br>比如：–spring.config.location=C:\Users\17732\Desktop\test\application.properties</li>
+<li>java -jar HelloWord-0.0.1-SNAPSHOT.jar –spring.config.location=C:\Users\17732\Desktop\test\application.properties</li>
 </ol>
-</li>
-<li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li>
-</ol>
-</blockquote>
-<p>学习素材来源：《大话设计模式》–程杰</p>
+<p>如果只是修改某一个配置，可以使用 –名称=value  –server.port=8888<br>需要注意的是，如果内部和外部有相同配置的时候，优先使用外部的。</p>
+<h3 id="涨知识"><a href="#涨知识" class="headerlink" title="涨知识"></a>涨知识</h3><p>springboot的devtools.jar这个包有个有意思的地方，就是全局配置文件，这个在公司开发的时候用的非常多，在你的用户目录下加上一个.spring-boot-devtools.properties<br>，开发的时候所有的配置文件都可以放在里面，前提是引入了相关的jar包才行。 </p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -165,12 +172,12 @@
     	
     	
 		
-			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-入门">上一篇</a>
+			<a href="/2020/11/28/distributed_springboot_2/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="分布式-springboot事务控制">上一篇</a>
 		
 
 		
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">下一篇</a>
+			<a href="/2020/11/28/kafkaGettinginstall/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="Kafka-集群搭建">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -273,7 +280,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/28/designPrinciples/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/11/28/distributed_springboot_1/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>

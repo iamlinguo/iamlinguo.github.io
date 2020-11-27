@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://iamlinguo.github.io/"/>
-  <updated>2020-09-26T19:51:41.575Z</updated>
+  <updated>2020-11-27T19:38:45.326Z</updated>
   <id>https://iamlinguo.github.io/</id>
   
   <author>
@@ -15,6 +15,215 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Restful风格的接口设计</title>
+    <link href="https://iamlinguo.github.io/2020/11/28/javaRestful/"/>
+    <id>https://iamlinguo.github.io/2020/11/28/javaRestful/</id>
+    <published>2020-11-27T19:11:30.023Z</published>
+    <updated>2020-11-27T19:38:45.326Z</updated>
+    
+    <content type="html"><![CDATA[<hr><pre><code>好好写接口，让前端少些抱怨</code></pre><hr><p>说到接口，不同的场景有不同的样式。<br>通常我们在接口设计中，很多接口都是/url/suburl/subdetails类似这样的格式，无限扩张接口拼接，其实这样很不美观，如果一个controller的接口过多，也不方便管理</p><h1 id="Restful接口"><a href="#Restful接口" class="headerlink" title="Restful接口"></a>Restful接口</h1><h3 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h3><p>按照请求方式，我们常用的几种：<br>get：常用查询，获取列表或详情<br>post: 常用新增<br>put: 常用大幅度的数据修改<br>patch：局部的数据修改，比如禁用启用<br>delete: 常用删除</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(path = <span class="string">"/product"</span>,name=<span class="string">"商品接口"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">productController</span></span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping</span>(path= <span class="string">""</span>,name=<span class="string">"商品列表"</span>)</span><br><span class="line"><span class="keyword">public</span> .. </span><br><span class="line"></span><br><span class="line"><span class="meta">@PostMapping</span>(path = <span class="string">""</span> , name = <span class="string">"新增接口"</span>)</span><br><span class="line"><span class="keyword">public</span> ...</span><br><span class="line"></span><br><span class="line"><span class="meta">@PutMapping</span>(path = <span class="string">""</span> , name = <span class="string">"修改接口"</span>)</span><br><span class="line"><span class="keyword">public</span> ...</span><br><span class="line"></span><br><span class="line"><span class="meta">@DeleteMapping</span>(path = <span class="string">"/&#123;id&#125;"</span> , name = <span class="string">"删除接口"</span>)</span><br><span class="line"><span class="keyword">public</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>一套CRUD的接口应该是如上所述的，并不需要过多的子url<br>如果接口中存在详细扩展，比如详情的查询或扩散的接口，有两种定义方式</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(path = <span class="string">"/product"</span>,name=<span class="string">"商品接口"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">productController</span></span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping</span>(path = <span class="string">"/details"</span> , name = <span class="string">"详情接口"</span>)</span><br><span class="line"><span class="keyword">public</span> ...</span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping</span>(path = <span class="string">""</span> , name = <span class="string">"详情接口"</span> , params = <span class="string">"method = details"</span>)</span><br><span class="line"><span class="keyword">public</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>如果详情也有CRUD，一般情况下推荐使用第二种，否则使用url拼接即可    </p><h3 id="返回值定义"><a href="#返回值定义" class="headerlink" title="返回值定义"></a>返回值定义</h3><p>正常的做法，一般都是定义抽象类，封装响应码，响应信息，响应数据。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RestResponse</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">Integer code ; <span class="comment">// 响应码</span></span><br><span class="line">String msg;  <span class="comment">//响应信息</span></span><br><span class="line">T data; <span class="comment">//响应数据  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>分页数据封装：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PageData</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">Integer total;</span><br><span class="line">List&lt;T&gt; rows; <span class="comment">//响应数据  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>如果分页响应的数据需要扩展，直接继承PageData。<br>如此一来，一套简洁完美的接口便定义好了。</p><p>其他的响应接口，比如javaweb，就可能随意一点了，看后台选什么模板把<br>再比如我们写小程序接口的时候，所有的请求形式都定义为了POST请求，响应格式也是<code>text/html; charset=UTF-8</code>，统一的做法都是封装一个HttpServletResponse的响应工具类<br>重写ContentType。</p><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;好好写接口，让前端少些抱怨&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;说到接口，不同的场景有不同的样式。&lt;br&gt;通常我们在接口设计中，很多接口都是/url/suburl/subdetails类似这样的格式，无限扩张接口拼接，其实这样很不美观，如果一个
+      
+    
+    </summary>
+    
+    
+      <category term="java基础" scheme="https://iamlinguo.github.io/categories/java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>好看的枚举</title>
+    <link href="https://iamlinguo.github.io/2020/11/28/javaEnum/"/>
+    <id>https://iamlinguo.github.io/2020/11/28/javaEnum/</id>
+    <published>2020-11-27T18:43:59.445Z</published>
+    <updated>2020-11-27T19:08:58.490Z</updated>
+    
+    <content type="html"><![CDATA[<hr><pre><code>fuck,我连枚举都不会。</code></pre><hr><p>枚举使用的地方很多很多很多。重要的事说三遍。<br>举例：<br>以前我们在表中对数据做类型区分的时候，很多情况下都会使用1,2,3数字来区分代替，然后在代码中写一段if来区分，最后可能写的自己都忘记了，如果业务够复杂的话，基本上过<br>几天自己写的代码都想不起来什么意思了，除非你写了足够多的注释，不然真就隔三日对(代码)刮目相看。<br>我司之前的一个项目是外包出去的，一个线上商城，最近人手够了，我们也参与其中，大家开始纷纷吐槽，shit…这什么意思，谁来告诉我!这段代码谁看得懂，卧槽。类似这样的<br>话我听到不少，包括我过去写的代码也是这样让别人看不懂。<br>其实类似这样的场景可以使用枚举处理，举个栗子，服装有上衣、下装、鞋服配等几大类型，1=上衣，2=下装…依次。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(type == <span class="number">1</span>)</span><br><span class="line"> sout(<span class="string">"衣服"</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(type == <span class="number">3</span>)</span><br><span class="line"> sout(<span class="string">"鞋子"</span>)</span><br></pre></td></tr></table></figure><h3 id="优化一下上面的代码"><a href="#优化一下上面的代码" class="headerlink" title="优化一下上面的代码"></a>优化一下上面的代码</h3><p>首先我们定义表结构的时候使用字符串形式 – varchar<br>定义枚举类：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> clothesType&#123;</span><br><span class="line"></span><br><span class="line">JACKET(<span class="string">"上装"</span>),BOTTOMS(<span class="string">"下装"</span>),SHOES(<span class="string">"鞋子"</span>);  <span class="comment">//枚举值</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> desc; <span class="comment">// 枚举描述 对应括号中的内容  </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">clothesType</span><span class="params">(String desc)</span></span>&#123;   <span class="comment">//枚举的构造函数，我们使用枚举的时候，这个参数的值就是括号中的内容</span></span><br><span class="line"><span class="keyword">this</span>.desc = desc;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用枚举来判断  </span></span><br><span class="line"><span class="keyword">if</span>(clothesType.JACKET == type)</span><br><span class="line">sout(<span class="string">"衣服"</span>);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(clothesType.BOTTOMS == type)</span><br><span class="line">sout(<span class="string">"鞋子"</span>)</span><br></pre></td></tr></table></figure><p>这样的代码绝对能人别人一目了然，看得懂。</p><p>有小朋友开始问了，我从数据库中读取出来的是字符串啊！怎么比值啊？<br>我们再对枚举类做一些优化</p><pre><code class="java"><span class="keyword">public</span> <span class="keyword">enum</span> clothesType{    JACKET(<span class="string">"上装"</span>),BOTTOMS(<span class="string">"下装"</span>),SHOES(<span class="string">"鞋子"</span>);  <span class="comment">//枚举值</span>    <span class="keyword">private</span> <span class="keyword">final</span> desc; <span class="comment">// 枚举描述 对应括号中的内容  </span>    <span class="function"><span class="keyword">private</span> <span class="title">clothesType</span><span class="params">(String desc)</span></span>{   <span class="comment">//枚举的构造函数，我们使用枚举的时候，这个参数的值就是括号中的内容</span>        <span class="keyword">this</span>.desc = desc;    }    <span class="comment">// 通过枚举值即名称或描述来转换成枚举</span>    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> clothesType <span class="title">parse</span><span class="params">(String nameOrDesc)</span></span>{        <span class="keyword">for</span>(clothesType item : clothesType.values()){  <span class="comment">//遍历所有的枚举值</span>            <span class="keyword">if</span>(item.desc.equals(nameOrDesc) || item.name().equals(nameOrDesc)){                <span class="keyword">return</span> item; <span class="comment">// 存在的枚举值返回</span>            }        }    }}<span class="comment">//使用枚举来判断  假设type是字符串 </span><span class="keyword">if</span>(clothesType.JACKET == clothesType.parse(type))    sout(<span class="string">"衣服"</span>);<span class="keyword">else</span> <span class="keyword">if</span>(clothesType.BOTTOMS == clothesType.parse(type))    sout(<span class="string">"鞋子"</span>)</code></pre><p>枚举是可以直接使用==来判断的哦。<br>同样括号中的值也可以有多个”,”分割，比如根据前缀或后缀匹配做枚举转换。</p><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;fuck,我连枚举都不会。&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;枚举使用的地方很多很多很多。重要的事说三遍。&lt;br&gt;举例：&lt;br&gt;以前我们在表中对数据做类型区分的时候，很多情况下都会使用1,2,3数字来区分代替，然后在代码中写一段if来区分，最
+      
+    
+    </summary>
+    
+    
+      <category term="java基础" scheme="https://iamlinguo.github.io/categories/java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>分布式-springboot事务控制</title>
+    <link href="https://iamlinguo.github.io/2020/11/28/distributed_springboot_2/"/>
+    <id>https://iamlinguo.github.io/2020/11/28/distributed_springboot_2/</id>
+    <published>2020-11-27T18:29:13.982Z</published>
+    <updated>2020-11-27T18:32:21.843Z</updated>
+    
+    <content type="html"><![CDATA[<hr><pre><code>让cv成为create</code></pre><hr><h1 id="springboot事务控制知识"><a href="#springboot事务控制知识" class="headerlink" title="springboot事务控制知识"></a>springboot事务控制知识</h1><p>保证数据的一致性，需要事务的控制。<br>spring的事务管理分为两种，编程式和声明式<br><code>@Transation</code>注解：<br>不仅可以注解在方法上，也可以直接在类，接口上，当注解在类上的时候意味着此类的所有public方法都是开启事务的，如果类和方法同时使用了事务注解，采用就近原则，<br>使用方法上的事务控制。 </p><h3 id="1-事务的隔离级别："><a href="#1-事务的隔离级别：" class="headerlink" title="1.事务的隔离级别："></a>1.事务的隔离级别：</h3><p>default：默认值，表示使用数据库的默认隔离级别，对大部分的数据库而言，通常就是read_committed<br>read_committed:该事务隔离级别表示一个事务只能读取另外一个事务已经提交的数据，可以防止脏读。<br>read_uncommited：该事务隔离级别表示一个事务可以读取另外一个事务已修改但没有提交的事务，该级别不能防止脏读和不可重复读<br>repeatable_read：该隔离级别表示一个事务在整个过程中可以多次重复查询，每次返回的记录都相同，即逝查询前有新增的数据满足查询，这些新增的数据也会被忽略，<br>该级别可以防止脏读和不可重复读、<br>serializable:所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，该级别可以防止脏读，不可重复读和幻读。<br>注解的属性：isolation  </p><h3 id="2-事务的传播行为。"><a href="#2-事务的传播行为。" class="headerlink" title="2.事务的传播行为。"></a>2.事务的传播行为。</h3><p>required:如果当前存在事务，则加入事务，如果不存在，就创建一个新的事务。<br>supports:如果当前存在事务，则加入事务，如果不存在，以非事务的方式运行。<br>mandatory:如果当前存在事务，则加入事务，如果不存在，抛出异常。<br>requires_new:创建一个新的事务，如果当前存在事务，则把当前事务挂起。<br>not_supported:以非事务的方式运行，如果当前存在事务，则把当前事务挂起。<br>nerver:以非事务运行，如果当前存在事务，抛出异常<br>nested:如果当前存在事务，则创建一个事务作为当前的嵌套事务来处理，如果当前没有事务，和required一致。<br>注解的属性：propagation </p><p>timeout:事务的超时时间，默认值是-1，如果超过时间限制事务没有完成，自动回滚。<br>readonly:指定事务是否为只读事务，默认为false，为了忽略那些不需要事务的方法，比如读取数据，可以设置为read_only为true<br>rollkackfor:用于指定能够触发事务回滚的异常类型，可以指定多个异常<br>norollbackfor:指定那些异常不需要回滚<br>嵌套事务失效的场景：<br>在同一个类中，一个有事务的方法和一个没有事务的方法相互调用，都不会开启事务。<br>比如一个A方法标有注解B方法没有注解；</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span>&#123;</span><br><span class="line"><span class="comment">//a</span></span><br><span class="line">a()&#123;</span><br><span class="line">b();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// b </span></span><br><span class="line"><span class="meta">@transaction</span></span><br><span class="line">b()&#123;</span><br><span class="line">  <span class="comment">//sql</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>在一个没有注解的方法调用一个有事务注解的方法的时候，事务是不会生效的，原因：声明式事务采用的是cglib代理，而cglib代理的产生是继承原类，也就是说，我们在调用a方<br>法的时候，a没有开启事务，而a调用b的时候调的是原类的b方法，而不是代理之后的b方法，相反，如果b()调用a()，这样事务是生效的，因为b在代理中已经开启了事务，<br>在调用a()时，a也被事务管理了。<br>解决的方法：<br>两个方法拆分在不同的类中，这样b()的代理类会开启事务。不过要注意先后顺序，如果a()调用b()，那么b()是有事务的，而a()没有，因为在a()之后才开启的事务,反之。</p><p>声明式事务常见的一些坑：<br>1.在一个事务中，如果出现异常，很多情况下是不会回滚的，因为默认的事务规则是遇到runtimeException及其子类，和error错误才会回滚，如果想针对检测异常进行事务回滚，<br>需要用rollbackfor属性声明<br>2.在业务层捕捉异常后，发现事务不生效的情况，比如经常在service层对异常进行了try-catch处理后，这种情况下事务是不生效的，所以一般推荐的做法是在service层抛出异常<br>，所有的异常处理爱controller中处理，已保证事务对异常的捕捉。 </p><p>在springboot中使用。<br>在启动类上加上@EnableTransactionManagement  开始声明式事务 </p><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;让cv成为create&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h1 id=&quot;springboot事务控制知识&quot;&gt;&lt;a href=&quot;#springboot事务控制知识&quot; class=&quot;headerlink&quot; title=&quot;springboot事务控制知
+      
+    
+    </summary>
+    
+    
+      <category term="分布式" scheme="https://iamlinguo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>分布式-springboot</title>
+    <link href="https://iamlinguo.github.io/2020/11/28/distributed_springboot_1/"/>
+    <id>https://iamlinguo.github.io/2020/11/28/distributed_springboot_1/</id>
+    <published>2020-11-27T18:21:27.519Z</published>
+    <updated>2020-11-27T18:30:15.557Z</updated>
+    
+    <content type="html"><![CDATA[<hr><pre><code>让cv成为create</code></pre><hr><h1 id="springboot知识"><a href="#springboot知识" class="headerlink" title="springboot知识"></a>springboot知识</h1><p>创建一个springboot项目，使用maven打包构建工具，不再像ssm项目一样累赘，编写大量的配置文件，同时springboot内置了tomcat容器。<br>搭建好了第一个springboot项目之后，启动类上会有一个注解：<br>@SpringBootApplication<br>使用这个注解的前提是，启动类一定是在构建项目时的包下面，因为约束大于配置，这是使用maven必须承担的。<br>在@SpringBootApplication这个注解下还包含：<br>@ComponentScan：这是在SpringBoot中非常重要的一个注解，它会去扫描符合条件的包或者类(比如@Service、@Controller)，然后注入到容器中。<br>@EnableAutoConfigure:<br>这个注解是SpringBoot的自动装配，也就是加载第三方jar包到容器当中，在Springboot的启动过程中，会去spring-boot-autoconfigure.jar下面找到对应的<br>spring.factories文件，根据文件里面的键值对数据去查找对应的class文件，如果该类符合条件就注入到容器中，并且注入的这个类在依赖其他jar包的情况下，<br>依赖的jar包又有相应的依赖，都会被注入到容器当中，形成一条引用链。<br>tip:<br>这里说一下mybatis是如何抹掉xml文件的，在mybatis-springboot-autoconfigure这个jar包下面，有对应的mybatis的配置类MybatisProperties,这个类中包含了<br>我们xml文件当中对应的标签且被@ConfigurationProperties标识，所以每次springboot加载项目的时候会注入这个类，去根据属性名称寻找application.yml中对应的配置项。<br>springboot的默认配置文件只有:application.properties和application.yml。除此之外的都不是默认配置，不是默认配置文件需要用@PropertySource来加载。<br>另外，因为springboot帮我们配置了类似mybatis.xml文件，如果一定要使用自定义的文件就用@ImportResource加载自定义的配置类<br>配置类：</p><pre><code class="java"><span class="meta">@Configuration</span>   <span class="comment">//加上他之后这个类就是配置类</span><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>{    <span class="meta">@Bean</span><span class="comment">//加上它之后就相当于创建了一个&lt;bean&gt;&lt;/bean&gt;标签</span>    <span class="function"><span class="keyword">public</span> PetPo <span class="title">ppp</span><span class="params">()</span> </span>{<span class="comment">/*ppp相当于&lt;bean id="" class=""&gt;&lt;/bean&gt;中的id*/</span>        PetPo p=<span class="keyword">new</span> PetPo();        <span class="keyword">return</span> p;    <span class="comment">/*返回的结果类型就相当于&lt;bean id="" class=""&gt;&lt;/bean&gt;中的class*/</span>    }}</code></pre><p>springboot的多文件设置及切换<br>默认情况端口号下是读取默认的application.properties的，也叫主配置文件。<br>多个环境时，配置文件应为：<br>application-环境名.properties；<br>比如application-dev.properties;application-test.properties;<br>拿端口为例：<br>主配置文件：<br>server.port = 8080<br>application-dev.properties：<br>server.port = 8081<br>spring.profiles:dev //声明环境为开发<br>application-test.properties:<br>server.port = 8082<br>spring.profiles:test //声明环境为测试<br>这样就代表配置好了三个环境，如果需要将默认主环境切到开发环境：<br>spring.profiles.active=dev  //切换到开发环境的端口下  </p><p>如何动态的切换数据源：<br>1.右单击 -&gt;Run As-&gt;RunConfigurations-&gt;Arguments-&gt;在里面输入–spring.profiles.active=环境名<br>比如：–spring.profiles.active=dev<br>2.打成jar包，然后使用命令行运行<br>java -jar HelloWord-0.0.1-SNAPSHOT.jar –spring.profiles.active=dev  </p><p>之前经常看到旁边的测试同志打包的时候都是通过这个命令切换配置文件</p><p>使用外部的配置文件：</p><ol><li>右单击 -&gt;Run As-&gt;RunConfigurations-&gt;Arguments-&gt;在里面输入–spring.config.location=路径名<br>比如：–spring.config.location=C:\Users\17732\Desktop\test\application.properties</li><li>java -jar HelloWord-0.0.1-SNAPSHOT.jar –spring.config.location=C:\Users\17732\Desktop\test\application.properties</li></ol><p>如果只是修改某一个配置，可以使用 –名称=value  –server.port=8888<br>需要注意的是，如果内部和外部有相同配置的时候，优先使用外部的。</p><h3 id="涨知识"><a href="#涨知识" class="headerlink" title="涨知识"></a>涨知识</h3><p>springboot的devtools.jar这个包有个有意思的地方，就是全局配置文件，这个在公司开发的时候用的非常多，在你的用户目录下加上一个.spring-boot-devtools.properties<br>，开发的时候所有的配置文件都可以放在里面，前提是引入了相关的jar包才行。 </p><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;让cv成为create&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h1 id=&quot;springboot知识&quot;&gt;&lt;a href=&quot;#springboot知识&quot; class=&quot;headerlink&quot; title=&quot;springboot知识&quot;&gt;&lt;/a&gt;sprin
+      
+    
+    </summary>
+    
+    
+      <category term="分布式" scheme="https://iamlinguo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Kafka-集群搭建</title>
+    <link href="https://iamlinguo.github.io/2020/11/28/kafkaGettinginstall/"/>
+    <id>https://iamlinguo.github.io/2020/11/28/kafkaGettinginstall/</id>
+    <published>2020-11-27T17:50:05.534Z</published>
+    <updated>2020-11-27T18:19:03.676Z</updated>
+    
+    <content type="html"><![CDATA[<hr><pre><code>海阔凭鱼跃，天高任鸟飞。</code></pre><hr><h1 id="安装的一些知识"><a href="#安装的一些知识" class="headerlink" title="安装的一些知识"></a>安装的一些知识</h1><ol><li>启动kafka集群的基础是依赖于zookeeper集群，通过zookeeper服务去连接，没有zk也就没有kafka集群，所以分布式中很多都是基于zk的。</li><li>必要的server.properties配置需要修改<br>broker.id= 0 or 1 or other  kafka集群区分 每个实例的区分，记得之前的zk也是按照一个id进行区分<br>zookeeper.connect = zookeeper注册地址 多个用,分割<br>listeners =  listener_name://host_name:port  kafka本机的地址<br>log.dirs = kafka的数据目录</li></ol><p>kafka启动在根目录下<br>常规启动: <code>bin/kafka-server-start.sh config/server.properties</code>    脚本+ kafka本机配置<br>这样启动的方式弊端在于，只要你退出进程就会关闭。<br>进程启动:  <code>nohup bin/kafka-server-start.sh config/server.properties &gt;/dev/null 2&gt;&amp;1 &amp;</code><br>其实就是后台启动，就像你挂QQ升级一样。<br>停止： <code>bin/kafka-server-stop.sh</code></p><h1 id="linux命令"><a href="#linux命令" class="headerlink" title="linux命令"></a>linux命令</h1><p>netstat 查看系统的网络状态<br>ctrl+c 退出当前程序<br>tail -f xx 实时查看日志文本</p><p>如果遇到集群启动失败，仔细检查防火墙、网络、配置文件、zk集群是否正常，作为一个新手，都是我走过的坑，所以有问题先看是否是其中。</p><p>聊聊我司对kafka的使用情况。<br>我目前只接触过一个场景，就是利用kafka的消息系统。<br>业务涉及内容：任务发起方，kafka消息，kafka消息处理。<br>在我司的任务调度系统中，使用的是xxl开源系统，定时执行任务脚本，将第三方数据读取到我司数据库或将本地数据做定时数据统计，生成业务表单发送到邮件或钉钉或直接写入<br>数据库做更新。<br>以钉钉告警为例：检查店员头像缺失告警<br>在xxlJob中实现任务，检测数据库中是否存在店员头像缺失，如果有缺失，将消息发送至钉钉告警群作提示。<br>任务定时每周凌晨执行，类似这样的场景还有很多很多，可能凌晨存在100个任务同时执行，但消费系统(推送到钉钉的单独服务)可能无法承受，这时我们引入kafka作为疏通管道，<br>每个任务跑完后将消息发送到kafka排队，等待消费系统挨个读取(消费系统可能由集群组成)，消费系统将kafka中的消息拉取后调用第三方接口推送消息。</p><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;海阔凭鱼跃，天高任鸟飞。&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h1 id=&quot;安装的一些知识&quot;&gt;&lt;a href=&quot;#安装的一些知识&quot; class=&quot;headerlink&quot; title=&quot;安装的一些知识&quot;&gt;&lt;/a&gt;安装的一些知识&lt;/h1&gt;&lt;ol&gt;
+&lt;l
+      
+    
+    </summary>
+    
+    
+      <category term="中间件" scheme="https://iamlinguo.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>分布式-zookeeper[2]</title>
+    <link href="https://iamlinguo.github.io/2020/11/28/distributed_zookeeper_2/"/>
+    <id>https://iamlinguo.github.io/2020/11/28/distributed_zookeeper_2/</id>
+    <published>2020-11-27T17:43:47.744Z</published>
+    <updated>2020-11-27T17:48:34.304Z</updated>
+    
+    <content type="html"><![CDATA[<hr><pre><code>前方是巨人</code></pre><hr><h1 id="zookeeper相关知识"><a href="#zookeeper相关知识" class="headerlink" title="zookeeper相关知识"></a>zookeeper相关知识</h1><h3 id="zoo-cfg-配置"><a href="#zoo-cfg-配置" class="headerlink" title="zoo.cfg 配置"></a>zoo.cfg 配置</h3><p>ticktime : 这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。<br>dataDir : 顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper的日志文件是在bin目录下，有一个zookeeper.out文件。<br>clientPort: 这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。伪集群模式下，这个端口需要配置成不同的。如果是多台虚拟机或者服务器下，则无需更改。<br>【server】的配置含义说明：<br>server.A=B:C:D<br>其中 A 是一个数字，表示这个是第几号服务器；<br>B 是这个服务器的 ip 地址；<br>C 表示的是这个服务器与集群中的 Leader 服务器交换信息的端口；<br>D 表示的是万一集群中的 Leader 服务器挂了，需要一个端口来重新进行选举，选出一个新的 Leader，而这个端口就是用来执行选举时服务器相互通信的端口。</p><p>如果是伪集群的配置方式（也就是在一台服务器上搭建多个ZK服务节点），由于 一台服务器下的IP地址肯定一样，所以不同的 Zookeeper 实例通信端口号不能一样，故需要给它们分配不同的端口号。<br>相反，如果是在不同的服务器下（不同的虚拟机，IP地址不同）搭建ZK的话，由于IP地址不同，则C与D对应的通信端口可以保持一致。当然也可以配置成其他的端口。</p><p>【注意点】：<br>其中的server.1里面的数字1，是我们在myid文件中指定的数值。代表不同的zk节点。<br>同时，IP地址配置也要与server.1所在的服务器节点的IP地址一致。<br>后面的2个通信端口，随意指定，只要不与其他端口冲突就行。</p><h1 id="涉及的一些linux命令"><a href="#涉及的一些linux命令" class="headerlink" title="涉及的一些linux命令"></a>涉及的一些linux命令</h1><ol><li>tar -zxvf xxx -C xx  解压到某个文件夹下面  </li><li>table键  快速拼写  </li><li>mv xx xx 重命名文件或文件夹  </li><li>service iptables stop  chkconfig iptables off  永久关闭防火墙<br>service iptables status   查看防火墙状态</li><li>yum install -y java-1.8.0-openjdk-devel.x86_64 快速安装jdk  </li><li>lsof -i:xx 查看被占用的端口</li><li>kill -9 $xx 杀死进程 </li></ol><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;前方是巨人&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h1 id=&quot;zookeeper相关知识&quot;&gt;&lt;a href=&quot;#zookeeper相关知识&quot; class=&quot;headerlink&quot; title=&quot;zookeeper相关知识&quot;&gt;&lt;/a&gt;zookeepe
+      
+    
+    </summary>
+    
+    
+      <category term="分布式" scheme="https://iamlinguo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>分布式-zookeeper[1]</title>
+    <link href="https://iamlinguo.github.io/2020/11/28/distributed_zookeeper_1/"/>
+    <id>https://iamlinguo.github.io/2020/11/28/distributed_zookeeper_1/</id>
+    <published>2020-11-27T17:38:28.425Z</published>
+    <updated>2020-11-27T17:43:30.497Z</updated>
+    
+    <content type="html"><![CDATA[<hr><pre><code>打铁还需自身硬。</code></pre><hr><h1 id="zookeeper的理论知识"><a href="#zookeeper的理论知识" class="headerlink" title="zookeeper的理论知识"></a>zookeeper的理论知识</h1><p>随着发展，集中式演变到分布式，在分布式中存在一致性的问题，在分布式的模型下， 需要一个系统或组件来解决一致性的问题。–分布式协调组件–zookeeper  </p><h3 id="什么是zookeeper"><a href="#什么是zookeeper" class="headerlink" title="什么是zookeeper?"></a>什么是zookeeper?</h3><p>zookeeper是一个开放源码的分布式服务协调组件，高性能的一致性解决方案，将一些复杂的分布式一致性服务封装起来，构成一个可靠的原语集，提供简单的接口给用户使用。 </p><h3 id="提供了那些特性？"><a href="#提供了那些特性？" class="headerlink" title="提供了那些特性？"></a>提供了那些特性？</h3><ol><li>顺序一致性，客户端的更新顺序与他们发送的顺序一致</li><li>原子性，要么全成功要么失败</li><li>单一视图，无论客户端连接到哪一个服务器，都看到相同的zookeeper视图 </li><li>可靠性，一个更新操作完后，客户端再次更新之前，值不会改变 </li><li>实时性，特定的一段时间内，系统任何变更都会被客户端检测到。 </li></ol><h3 id="zookeeper的工作过程"><a href="#zookeeper的工作过程" class="headerlink" title="zookeeper的工作过程"></a>zookeeper的工作过程</h3><p>zookeeper集群启动后，会进行leader选举，其他的服务都是follower，并且和leader建立连接，用户数据同步和请求转发等。比如有请求落到follower机器上的时候，<br>follower机器会把请求转发给leader，由leader处理该请求，比如数据的写，在请求处理完之后再把数据同步到所有的follower  </p><h3 id="zookeeper和CAP的关系"><a href="#zookeeper和CAP的关系" class="headerlink" title="zookeeper和CAP的关系"></a>zookeeper和CAP的关系</h3><p>任何的分布式模型下，都是无法保证一致性，可用性，分区容错性的，只能保证其中两个，比如ACID就是保证了CA，不需要分区，著名的base理论也是保证了AP丢弃了C，<br>但是会保留最终一致性。zookeeper保证了CP丢弃了A，没有容错性也就谈不上分布式了，没有一致性，那后果也是很严重的，也是在极端情况下，当集群垮掉，<br>丢掉可用性，下次再请求。</p><h3 id="zookeeper中的角色"><a href="#zookeeper中的角色" class="headerlink" title="zookeeper中的角色"></a>zookeeper中的角色</h3><ol><li>leader: 负责进行投票的发起和决议，更新系统的状态，为客户端提供读和写的服务 </li><li>follower:用于接收客户端的请求并像客户端返回结果，参与leader选举，为客户端提供读的服务，</li><li>observer观察者，接收客户端连接，将写的请求转发给leader，但是不参与leader的选举，只同步leader的状态，observer是为了扩展系统，提高读取速度<br>客户端。  </li></ol><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;打铁还需自身硬。&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h1 id=&quot;zookeeper的理论知识&quot;&gt;&lt;a href=&quot;#zookeeper的理论知识&quot; class=&quot;headerlink&quot; title=&quot;zookeeper的理论知识&quot;&gt;&lt;/a&gt;zo
+      
+    
+    </summary>
+    
+    
+      <category term="分布式" scheme="https://iamlinguo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>分布式的一致性</title>
+    <link href="https://iamlinguo.github.io/2020/11/28/distributed_2/"/>
+    <id>https://iamlinguo.github.io/2020/11/28/distributed_2/</id>
+    <published>2020-11-27T16:46:29.460Z</published>
+    <updated>2020-11-27T17:35:24.591Z</updated>
+    
+    <content type="html"><![CDATA[<hr><pre><code>千里之行，始于足下。</code></pre><hr><h1 id="一致性的重要性"><a href="#一致性的重要性" class="headerlink" title="一致性的重要性"></a>一致性的重要性</h1><p>分布式领域CAP理论告诉我们，任何一个分布式系统都无法同时满足一致性、可用性、分区容错性三个基本的需求。最多只能满足其中的两项，<br>但是一个分布式系统中，无论如何都无法彻底放弃一致性，如果放弃一致性，就说明这个系统中的数据不可信，数据也就没有意义了，无论如何，<br>分布式系统的一致性问题都需要关注。<br>tip:通常我们说的放弃一致性，是放弃强一致性，还是达到最终一致。</p><h1 id="数据的一致性"><a href="#数据的一致性" class="headerlink" title="数据的一致性"></a>数据的一致性</h1><p>数据一致性是数据库中的概念，简单的理解就是数据的正确性和完整性。<br>比如在集中式的服务下，我们可以通过事务或者锁对数据来保证，但是在分布式的环境下，多台服务的环境下就很难保证了，要保证多台服务器的<br>数据库读写到同一条数据很难，比如某个服务在写的过程中突然宕机，这也是分布式中必须面对的问题。 </p><h3 id="数据一致性的需求来源"><a href="#数据一致性的需求来源" class="headerlink" title="数据一致性的需求来源"></a>数据一致性的需求来源</h3><p>可用性，在数据复制到多台服务的过程中，可以消除单点故障，不会因为某个数据服务宕机导致服务无法正常运行。<br>性能，通过负载均衡技术，能够让分布在不同服务上的数据库对外提供服务，有效提高系统性能。<br>集中式和分布式的比较：<br>与集中式相比，分布式的性价比更高，处理任务的能力更强，可用性，扩展性也更好，当然了，分布式也存在一些问题，就是网络问题，无法沟通啥都不是，<br>随着分布式的服务越来越多的话，服务宕机的可能性也会越大，还有可能发生的最大的问题，就是数据处理时，一旦发生问题，数据就无法保证一致性，<br>但系统最重要的就是数据，插一段小话(数据时代，得数据者得天下)。</p><h1 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h1><p>理论：一个分布式系统只能同时满足一致性(Consistency)、可用性(Availability)、和分区容错性(Partition tolerance)三项中的两项。</p><h3 id="CAP的定义"><a href="#CAP的定义" class="headerlink" title="CAP的定义"></a>CAP的定义</h3><p>Consistency一致性<br>在进行数据的更新操作时，所有节点在同一时间的数据完全一致，一致性，就是数据一致性。<br>一致性可以从两个不同的角度看，一个是客户端，一个是服务端，从客户端看，主要指的是多并发访问时更新过的数据如何获取的问题，从服务端看，<br>则是更新如何复制分布到整个系统<br>一致性问题是因为并发，一定要主要考虑并发问题。</p><p>三种一致性策略：<br>对于关系型数据库，要求更新过的数据能被后续的访问都能看到，这是强一致性。<br>如果能容忍后续的部分或者全部访问不到，则是弱一致性。<br>如果经过一段时间后要求能访问到更新后的数据，则是最终一致性<br>CAP中不可能同时满足的一致性指的是强一致性。</p><p>我的理解：<br>强一致性<br>在多个服务在调用同一张表时，比如A新增了一条数据，必须保证B查询的数据有A新增的数据<br>弱一致性<br>在多个服务在调用同一张表时，比如A新增了一条数据，不保证B读取到的就是A新增后的数据，在某个时间后可能读取到，可能由于一些网络原因或延迟问题，比如刷新一下又对了<br>最终一致性<br>系统最终返回上一次更新操作的值。不一致的窗口主要受通信延迟，系统负载影响，比如过节抢票，前一秒有票，点进去付款的时候提示你没有票了。</p><p>Availability可用性<br>服务一直可用，正常的响应时间。<br>对于一个可用性的分布式系统，每一个非故障节点必须对每一个请求作出响应，所以，我们一般在衡量一个系统的可用性的时候，都是通过停机时间来计算的。</p><p>Partition Tolerance分区容错性<br>分布式系统在遇到某节点或网络分区故障的时候，仍然能够对外提供满足一致性和可用性的服务。 </p><p>前面说的分布式系统只能满足其二，可以百度一下CAP的证明。 </p><h1 id="BASE"><a href="#BASE" class="headerlink" title="BASE"></a>BASE</h1><p>理论： base指基本可用(Basically Available)、软状态(Soft State)、最终一致(Eventual Consistency)。</p><h3 id="基本可用"><a href="#基本可用" class="headerlink" title="基本可用"></a>基本可用</h3><p> 在分布式的服务中，如果发生故障，可以丢失部分可用性，保证核心功能正常服务。</p><h3 id="软状态"><a href="#软状态" class="headerlink" title="软状态"></a>软状态</h3><p> 在系统中存在中间状态，却又不影响整体可用。在分布式数据存储中，一般会有多个副本，允许他们延时一致性，就是软状态。</p><h3 id="最终一致"><a href="#最终一致" class="headerlink" title="最终一致"></a>最终一致</h3><p> 强一致性和弱一致性相反，最终一致是弱一致的特殊情况。  </p><p> ACID和BASE代表了两张截然不同的设计，ACID追求强一致性，BASE通过牺牲强一致获得可用。</p><ul><li><a href="https://iamlinguo.github.io/">iamlinguo</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;千里之行，始于足下。&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h1 id=&quot;一致性的重要性&quot;&gt;&lt;a href=&quot;#一致性的重要性&quot; class=&quot;headerlink&quot; title=&quot;一致性的重要性&quot;&gt;&lt;/a&gt;一致性的重要性&lt;/h1&gt;&lt;p&gt;分布式领域C
+      
+    
+    </summary>
+    
+    
+      <category term="分布式" scheme="https://iamlinguo.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>走进分布式</title>

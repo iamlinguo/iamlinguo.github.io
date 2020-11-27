@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-设计原则iamLinGuo</title>
+  <title>分布式的一致性iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-设计原则</h4>
-    <time datetime="2020-06-27T18:39:01.375Z"><i class="fa fa-clock-o"></i>2020-06-28</time>
+    <h4>分布式的一致性</h4>
+    <time datetime="2020-11-27T16:46:29.460Z"><i class="fa fa-clock-o"></i>2020-11-28</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/28/designPrinciples/" class="views views-post"  title="重学设计模式-设计原则"></span>
+        <span id="/2020/11/28/distributed_2/" class="views views-post"  title="分布式的一致性"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">分布式</a>
     		
         </span>
 	
@@ -134,21 +134,23 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p>
-<hr>
-<h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote>
-<ol>
-<li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li>
-<li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li>
-<li>依赖倒置（依赖倒转）原则<br>定义：<ol>
-<li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li>
-<li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li>
-</ol>
-</li>
-<li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li>
-</ol>
-</blockquote>
-<p>学习素材来源：《大话设计模式》–程杰</p>
+                <hr>
+<pre><code>千里之行，始于足下。</code></pre><hr>
+<h1 id="一致性的重要性"><a href="#一致性的重要性" class="headerlink" title="一致性的重要性"></a>一致性的重要性</h1><p>分布式领域CAP理论告诉我们，任何一个分布式系统都无法同时满足一致性、可用性、分区容错性三个基本的需求。最多只能满足其中的两项，<br>但是一个分布式系统中，无论如何都无法彻底放弃一致性，如果放弃一致性，就说明这个系统中的数据不可信，数据也就没有意义了，无论如何，<br>分布式系统的一致性问题都需要关注。<br>tip:通常我们说的放弃一致性，是放弃强一致性，还是达到最终一致。</p>
+<h1 id="数据的一致性"><a href="#数据的一致性" class="headerlink" title="数据的一致性"></a>数据的一致性</h1><p>数据一致性是数据库中的概念，简单的理解就是数据的正确性和完整性。<br>比如在集中式的服务下，我们可以通过事务或者锁对数据来保证，但是在分布式的环境下，多台服务的环境下就很难保证了，要保证多台服务器的<br>数据库读写到同一条数据很难，比如某个服务在写的过程中突然宕机，这也是分布式中必须面对的问题。 </p>
+<h3 id="数据一致性的需求来源"><a href="#数据一致性的需求来源" class="headerlink" title="数据一致性的需求来源"></a>数据一致性的需求来源</h3><p>可用性，在数据复制到多台服务的过程中，可以消除单点故障，不会因为某个数据服务宕机导致服务无法正常运行。<br>性能，通过负载均衡技术，能够让分布在不同服务上的数据库对外提供服务，有效提高系统性能。<br>集中式和分布式的比较：<br>与集中式相比，分布式的性价比更高，处理任务的能力更强，可用性，扩展性也更好，当然了，分布式也存在一些问题，就是网络问题，无法沟通啥都不是，<br>随着分布式的服务越来越多的话，服务宕机的可能性也会越大，还有可能发生的最大的问题，就是数据处理时，一旦发生问题，数据就无法保证一致性，<br>但系统最重要的就是数据，插一段小话(数据时代，得数据者得天下)。</p>
+<h1 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h1><p>理论：一个分布式系统只能同时满足一致性(Consistency)、可用性(Availability)、和分区容错性(Partition tolerance)三项中的两项。</p>
+<h3 id="CAP的定义"><a href="#CAP的定义" class="headerlink" title="CAP的定义"></a>CAP的定义</h3><p>Consistency一致性<br>在进行数据的更新操作时，所有节点在同一时间的数据完全一致，一致性，就是数据一致性。<br>一致性可以从两个不同的角度看，一个是客户端，一个是服务端，从客户端看，主要指的是多并发访问时更新过的数据如何获取的问题，从服务端看，<br>则是更新如何复制分布到整个系统<br>一致性问题是因为并发，一定要主要考虑并发问题。</p>
+<p>三种一致性策略：<br>对于关系型数据库，要求更新过的数据能被后续的访问都能看到，这是强一致性。<br>如果能容忍后续的部分或者全部访问不到，则是弱一致性。<br>如果经过一段时间后要求能访问到更新后的数据，则是最终一致性<br>CAP中不可能同时满足的一致性指的是强一致性。</p>
+<p>我的理解：<br>强一致性<br>在多个服务在调用同一张表时，比如A新增了一条数据，必须保证B查询的数据有A新增的数据<br>弱一致性<br>在多个服务在调用同一张表时，比如A新增了一条数据，不保证B读取到的就是A新增后的数据，在某个时间后可能读取到，可能由于一些网络原因或延迟问题，比如刷新一下又对了<br>最终一致性<br>系统最终返回上一次更新操作的值。不一致的窗口主要受通信延迟，系统负载影响，比如过节抢票，前一秒有票，点进去付款的时候提示你没有票了。</p>
+<p>Availability可用性<br>服务一直可用，正常的响应时间。<br>对于一个可用性的分布式系统，每一个非故障节点必须对每一个请求作出响应，所以，我们一般在衡量一个系统的可用性的时候，都是通过停机时间来计算的。</p>
+<p>Partition Tolerance分区容错性<br>分布式系统在遇到某节点或网络分区故障的时候，仍然能够对外提供满足一致性和可用性的服务。 </p>
+<p>前面说的分布式系统只能满足其二，可以百度一下CAP的证明。 </p>
+<h1 id="BASE"><a href="#BASE" class="headerlink" title="BASE"></a>BASE</h1><p>理论： base指基本可用(Basically Available)、软状态(Soft State)、最终一致(Eventual Consistency)。</p>
+<h3 id="基本可用"><a href="#基本可用" class="headerlink" title="基本可用"></a>基本可用</h3><p> 在分布式的服务中，如果发生故障，可以丢失部分可用性，保证核心功能正常服务。</p>
+<h3 id="软状态"><a href="#软状态" class="headerlink" title="软状态"></a>软状态</h3><p> 在系统中存在中间状态，却又不影响整体可用。在分布式数据存储中，一般会有多个副本，允许他们延时一致性，就是软状态。</p>
+<h3 id="最终一致"><a href="#最终一致" class="headerlink" title="最终一致"></a>最终一致</h3><p> 强一致性和弱一致性相反，最终一致是弱一致的特殊情况。  </p>
+<p> ACID和BASE代表了两张截然不同的设计，ACID追求强一致性，BASE通过牺牲强一致获得可用。</p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -165,12 +167,12 @@
     	
     	
 		
-			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-入门">上一篇</a>
+			<a href="/2020/11/28/distributed_zookeeper_1/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="分布式-zookeeper[1]">上一篇</a>
 		
 
 		
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">下一篇</a>
+			<a href="/2020/09/27/distributed_1/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="走进分布式">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -273,7 +275,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/28/designPrinciples/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/11/28/distributed_2/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>

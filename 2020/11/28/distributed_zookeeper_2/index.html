@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-设计原则iamLinGuo</title>
+  <title>分布式-zookeeper[2]iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-设计原则</h4>
-    <time datetime="2020-06-27T18:39:01.375Z"><i class="fa fa-clock-o"></i>2020-06-28</time>
+    <h4>分布式-zookeeper[2]</h4>
+    <time datetime="2020-11-27T17:43:47.744Z"><i class="fa fa-clock-o"></i>2020-11-28</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/28/designPrinciples/" class="views views-post"  title="重学设计模式-设计原则"></span>
+        <span id="/2020/11/28/distributed_zookeeper_2/" class="views views-post"  title="分布式-zookeeper[2]"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">分布式</a>
     		
         </span>
 	
@@ -134,21 +134,20 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p>
-<hr>
-<h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote>
-<ol>
-<li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li>
-<li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li>
-<li>依赖倒置（依赖倒转）原则<br>定义：<ol>
-<li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li>
-<li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li>
+                <hr>
+<pre><code>前方是巨人</code></pre><hr>
+<h1 id="zookeeper相关知识"><a href="#zookeeper相关知识" class="headerlink" title="zookeeper相关知识"></a>zookeeper相关知识</h1><h3 id="zoo-cfg-配置"><a href="#zoo-cfg-配置" class="headerlink" title="zoo.cfg 配置"></a>zoo.cfg 配置</h3><p>ticktime : 这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。<br>dataDir : 顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper的日志文件是在bin目录下，有一个zookeeper.out文件。<br>clientPort: 这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。伪集群模式下，这个端口需要配置成不同的。如果是多台虚拟机或者服务器下，则无需更改。<br>【server】的配置含义说明：<br>server.A=B:C:D<br>其中 A 是一个数字，表示这个是第几号服务器；<br>B 是这个服务器的 ip 地址；<br>C 表示的是这个服务器与集群中的 Leader 服务器交换信息的端口；<br>D 表示的是万一集群中的 Leader 服务器挂了，需要一个端口来重新进行选举，选出一个新的 Leader，而这个端口就是用来执行选举时服务器相互通信的端口。</p>
+<p>如果是伪集群的配置方式（也就是在一台服务器上搭建多个ZK服务节点），由于 一台服务器下的IP地址肯定一样，所以不同的 Zookeeper 实例通信端口号不能一样，故需要给它们分配不同的端口号。<br>相反，如果是在不同的服务器下（不同的虚拟机，IP地址不同）搭建ZK的话，由于IP地址不同，则C与D对应的通信端口可以保持一致。当然也可以配置成其他的端口。</p>
+<p>【注意点】：<br>其中的server.1里面的数字1，是我们在myid文件中指定的数值。代表不同的zk节点。<br>同时，IP地址配置也要与server.1所在的服务器节点的IP地址一致。<br>后面的2个通信端口，随意指定，只要不与其他端口冲突就行。</p>
+<h1 id="涉及的一些linux命令"><a href="#涉及的一些linux命令" class="headerlink" title="涉及的一些linux命令"></a>涉及的一些linux命令</h1><ol>
+<li>tar -zxvf xxx -C xx  解压到某个文件夹下面  </li>
+<li>table键  快速拼写  </li>
+<li>mv xx xx 重命名文件或文件夹  </li>
+<li>service iptables stop  chkconfig iptables off  永久关闭防火墙<br>service iptables status   查看防火墙状态</li>
+<li>yum install -y java-1.8.0-openjdk-devel.x86_64 快速安装jdk  </li>
+<li>lsof -i:xx 查看被占用的端口</li>
+<li>kill -9 $xx 杀死进程 </li>
 </ol>
-</li>
-<li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li>
-</ol>
-</blockquote>
-<p>学习素材来源：《大话设计模式》–程杰</p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -165,12 +164,12 @@
     	
     	
 		
-			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-入门">上一篇</a>
+			<a href="/2020/11/28/kafkaGettinginstall/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-集群搭建">上一篇</a>
 		
 
 		
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">下一篇</a>
+			<a href="/2020/11/28/distributed_zookeeper_1/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="分布式-zookeeper[1]">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -273,7 +272,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/28/designPrinciples/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/11/28/distributed_zookeeper_2/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>

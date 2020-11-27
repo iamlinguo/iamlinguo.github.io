@@ -20,7 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no", user-scalable=no">
-  <title>重学设计模式-设计原则iamLinGuo</title>
+  <title>分布式-springboot事务控制iamLinGuo</title>
   <link rel="shortcut icon" href="/images/bitbug_favicon.ico">
   
     
@@ -110,13 +110,13 @@
             </header>
                 
 <header class="blog-post-page-title">
-    <h4>重学设计模式-设计原则</h4>
-    <time datetime="2020-06-27T18:39:01.375Z"><i class="fa fa-clock-o"></i>2020-06-28</time>
+    <h4>分布式-springboot事务控制</h4>
+    <time datetime="2020-11-27T18:29:13.982Z"><i class="fa fa-clock-o"></i>2020-11-28</time>
     
     
     <span>
         <i class="fa fa-eye"></i>
-        <span id="/2020/06/28/designPrinciples/" class="views views-post"  title="重学设计模式-设计原则"></span>
+        <span id="/2020/11/28/distributed_springboot_2/" class="views views-post"  title="分布式-springboot事务控制"></span>
     </span>
     
     
@@ -124,7 +124,7 @@
 	
         <span><i class="fa fa-folder-o"></i>
     		
-    	       <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">设计模式</a>
+    	       <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="categories" data-toggle="tooltip" data-placement="top" title="Linux">分布式</a>
     		
         </span>
 	
@@ -134,21 +134,16 @@
     <article class="blog-post-block blog-post-page-content">
         <section>
             
-                <p>现在是北京时间2020-06-28 02:40。<br>今天要学的的内容是：设计原则</p>
-<hr>
-<h1 id="设计原则（principles）"><a href="#设计原则（principles）" class="headerlink" title="设计原则（principles）"></a>设计原则（principles）</h1><blockquote>
-<ol>
-<li>单一职能原则<br>定义： 就一个类而言，应该仅有一个引起它变化的原因。<br>浅出： 比如前面所说的，我们在一个类中定义了加减乘数四个方法，传入一个条件可以触发其中一个操作，这就是多职能，一个类做多种事情，显然不满足单一职能，<br>所以我们把四个操作分别封装成四个不同的操作类，每个类仅负责一件事。  </li>
-<li>开放 - 封闭原则<br>定义： 软件实体（类，模块，方法等）应该可以扩展，但是不允许修改。<br>浅出： 在我们之前的加减乘除的在一个类中时，如果某一个需求需要变更，那么我们需要去修改其中的某个方法，所以我们用接口去定义公共的方法，供每个子类去<br>实现，这样加减乘除就负责加减乘除，如果有新的需求，就继续加一个类，不对原来的代码做修改，但在原来接口的基础上做扩展。 </li>
-<li>依赖倒置（依赖倒转）原则<br>定义：<ol>
-<li>高层模块不依赖于底层模块，两个都应该依赖抽象。</li>
-<li>抽象不应该依赖细节，细节应该依赖于抽象（我们应该针对接口编程，而不要对实现编程）<br>浅出：比如接口设计，父级接口一依赖子级接口，它们都应该依赖于对象，也就是父接口和子接口本身不存在依赖关系，它们依赖的来源源自<br>对一个功能的抽象所形成。  像我们的集合框架，iterator 和 list 本身不存在依赖关系，对它们的定义是对业务的抽象。</li>
-</ol>
-</li>
-<li>里氏代换原则<br>定义： 子类型必须能够替换掉它们的父类型<br>浅出： 在父子接口定义以及子类实现的时候，应该满足里氏代换原则，也就是子类继承了父类后，在可以直接引用父类的的公共属性及方法时，也要能够重写父类。</li>
-</ol>
-</blockquote>
-<p>学习素材来源：《大话设计模式》–程杰</p>
+                <hr>
+<pre><code>让cv成为create</code></pre><hr>
+<h1 id="springboot事务控制知识"><a href="#springboot事务控制知识" class="headerlink" title="springboot事务控制知识"></a>springboot事务控制知识</h1><p>保证数据的一致性，需要事务的控制。<br>spring的事务管理分为两种，编程式和声明式<br><code>@Transation</code>注解：<br>不仅可以注解在方法上，也可以直接在类，接口上，当注解在类上的时候意味着此类的所有public方法都是开启事务的，如果类和方法同时使用了事务注解，采用就近原则，<br>使用方法上的事务控制。 </p>
+<h3 id="1-事务的隔离级别："><a href="#1-事务的隔离级别：" class="headerlink" title="1.事务的隔离级别："></a>1.事务的隔离级别：</h3><p>default：默认值，表示使用数据库的默认隔离级别，对大部分的数据库而言，通常就是read_committed<br>read_committed:该事务隔离级别表示一个事务只能读取另外一个事务已经提交的数据，可以防止脏读。<br>read_uncommited：该事务隔离级别表示一个事务可以读取另外一个事务已修改但没有提交的事务，该级别不能防止脏读和不可重复读<br>repeatable_read：该隔离级别表示一个事务在整个过程中可以多次重复查询，每次返回的记录都相同，即逝查询前有新增的数据满足查询，这些新增的数据也会被忽略，<br>该级别可以防止脏读和不可重复读、<br>serializable:所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，该级别可以防止脏读，不可重复读和幻读。<br>注解的属性：isolation  </p>
+<h3 id="2-事务的传播行为。"><a href="#2-事务的传播行为。" class="headerlink" title="2.事务的传播行为。"></a>2.事务的传播行为。</h3><p>required:如果当前存在事务，则加入事务，如果不存在，就创建一个新的事务。<br>supports:如果当前存在事务，则加入事务，如果不存在，以非事务的方式运行。<br>mandatory:如果当前存在事务，则加入事务，如果不存在，抛出异常。<br>requires_new:创建一个新的事务，如果当前存在事务，则把当前事务挂起。<br>not_supported:以非事务的方式运行，如果当前存在事务，则把当前事务挂起。<br>nerver:以非事务运行，如果当前存在事务，抛出异常<br>nested:如果当前存在事务，则创建一个事务作为当前的嵌套事务来处理，如果当前没有事务，和required一致。<br>注解的属性：propagation </p>
+<p>timeout:事务的超时时间，默认值是-1，如果超过时间限制事务没有完成，自动回滚。<br>readonly:指定事务是否为只读事务，默认为false，为了忽略那些不需要事务的方法，比如读取数据，可以设置为read_only为true<br>rollkackfor:用于指定能够触发事务回滚的异常类型，可以指定多个异常<br>norollbackfor:指定那些异常不需要回滚<br>嵌套事务失效的场景：<br>在同一个类中，一个有事务的方法和一个没有事务的方法相互调用，都不会开启事务。<br>比如一个A方法标有注解B方法没有注解；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span>&#123;</span><br><span class="line">	<span class="comment">//a</span></span><br><span class="line">	a()&#123;</span><br><span class="line">		b();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// b </span></span><br><span class="line">	<span class="meta">@transaction</span></span><br><span class="line">	b()&#123;</span><br><span class="line">	  <span class="comment">//sql</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在一个没有注解的方法调用一个有事务注解的方法的时候，事务是不会生效的，原因：声明式事务采用的是cglib代理，而cglib代理的产生是继承原类，也就是说，我们在调用a方<br>法的时候，a没有开启事务，而a调用b的时候调的是原类的b方法，而不是代理之后的b方法，相反，如果b()调用a()，这样事务是生效的，因为b在代理中已经开启了事务，<br>在调用a()时，a也被事务管理了。<br>解决的方法：<br>两个方法拆分在不同的类中，这样b()的代理类会开启事务。不过要注意先后顺序，如果a()调用b()，那么b()是有事务的，而a()没有，因为在a()之后才开启的事务,反之。</p>
+<p>声明式事务常见的一些坑：<br>1.在一个事务中，如果出现异常，很多情况下是不会回滚的，因为默认的事务规则是遇到runtimeException及其子类，和error错误才会回滚，如果想针对检测异常进行事务回滚，<br>需要用rollbackfor属性声明<br>2.在业务层捕捉异常后，发现事务不生效的情况，比如经常在service层对异常进行了try-catch处理后，这种情况下事务是不生效的，所以一般推荐的做法是在service层抛出异常<br>，所有的异常处理爱controller中处理，已保证事务对异常的捕捉。 </p>
+<p>在springboot中使用。<br>在启动类上加上@EnableTransactionManagement  开始声明式事务 </p>
 <ul>
 <li><a href="https://iamlinguo.github.io/">iamlinguo</a></li>
 </ul>
@@ -165,12 +160,12 @@
     	
     	
 		
-			<a href="/2020/08/29/kafkaGettingStart/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="Kafka-入门">上一篇</a>
+			<a href="/2020/11/28/javaEnum/" class="blog-post-page-readmore-prev" data-toggle="tooltip" data-placement="top" title="好看的枚举">上一篇</a>
 		
 
 		
 		
-			<a href="/2020/06/21/strategyPattern/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="重学设计模式-策略模式">下一篇</a>
+			<a href="/2020/11/28/distributed_springboot_1/" class="blog-post-page-readmore-next" data-toggle="tooltip" data-placement="top" title="分布式-springboot">下一篇</a>
 		
 
         <div style="clear: both;"></div>
@@ -273,7 +268,7 @@
                 return out;
             }
             // 生成
-            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/06/28/designPrinciples/")}).hide();
+            var qrcode= $('.post-qrcode-content-canvas').qrcode({width: 150,height: 150,text: toUtf8("https://iamlinguo.github.io/2020/11/28/distributed_springboot_2/")}).hide();
             var canvas=qrcode.find('canvas').get(0);
             $('.post-qrcode-content-img').attr('src',canvas.toDataURL('image/jpg'));
         </script>
